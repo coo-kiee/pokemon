@@ -1,22 +1,17 @@
 import { lazy, Suspense } from 'react';
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
 // Const
 import { PAGE_URL } from 'consts/common';
-import Spinner from 'pages/common/Spinner';
+import Spinner from 'components/Spinner';
 
 // Style
 import theme from 'styles/theme';
 import GlobalStyle from 'styles/GlobalStyle';
 
 // Component
-import Layout from 'pages/common/Layout';
+import Layout from 'components/Layout';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import PokeDexDetail from 'pages/poke-dex/detail';
 

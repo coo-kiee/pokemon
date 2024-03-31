@@ -19,6 +19,7 @@ module.exports = {
     'prettier/prettier': 'off',
     'no-console': 'off',
     'react/react-in-jsx-scope': 'off',
+    'react/jsx-props-no-spreading': 'off',
     'react/require-default-props': 'off',
     'react-refresh/only-export-components': [
       'warn',

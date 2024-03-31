@@ -27,7 +27,10 @@ const PokeDexListItem = ({
       to={`${PAGE_URL.POKE_DEX}/${pokemonNum}`}
       ref={triggerIncreaseShowCntRef}
     >
-      <PokeDexListItemImg src={createPokemonImgPath(pokemonNum)} />
+      <PokeDexListItemImg
+        src={createPokemonImgPath(pokemonNum)}
+        alt={pokemonInfo.name}
+      />
       <PokeDexListItemName>
         No.{pokemonNum}
         <br />
