@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { LayoutContainer } from 'styles/Layout';
+import { LayoutContainer } from 'styles/layout';
 
 const Layout = () => {
   return (

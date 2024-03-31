@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 // Style
-import * as S from 'styles/Spinner';
+import * as S from 'styles/spinner';
 
 const Spinner: FC = () => {
   return (

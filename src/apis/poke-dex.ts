@@ -1,8 +1,20 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+
+// Type
+import { PokemonList } from 'types';
+
 // Util
 import Axios from 'utils/axios';
 
-export const getPokemonList = async () => {
-  const data = await Axios.get('pokemon');
+const QUERY_KEY = {
+  POKEMON_LIST: () => ['pokemonList'],
+  POKEMON: (pokemonNum: number) => ['pokemon', pokemonNum],
+  EVOLUTION_CHAIN: (pokemonNum: number) => ['evolutionChain', pokemonNum],
+};
 
-  return { data };
+export const useGetPokemonList = () => {
+  return useSuspenseQuery({
+    queryKey: QUERY_KEY.POKEMON_LIST(),
+    queryFn: () => Axios.get<PokemonList>(`pokemon?offset=0&limit=100000`),
+  });
 };

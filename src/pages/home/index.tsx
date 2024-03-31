@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <>
       <div>HOME</div>
-      <Link to={PAGE_URL.POKE_DEX}>PokeDEx</Link>
+      <Link to={PAGE_URL.POKE_DEX}>PokeDex</Link>
     </>
   );
 };
