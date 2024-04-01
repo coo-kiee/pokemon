@@ -1,11 +1,7 @@
 import { PokemonList } from 'types';
 
 // Style
-import {
-  PokeDexListItemImg,
-  PokeDexListItemName,
-  PokeDexListItemWrapper,
-} from 'styles/poke-dex';
+import { PokeDexListItemImg, PokeDexListItemName, PokeDexListItemWrapper } from 'styles/pokeDexList';
 
 // Util
 import { createPokemonImgPath } from 'utils/createPokemonImgPath';
@@ -16,21 +12,12 @@ interface IPokemonCard {
   pokemonInfo: PokemonList['results'][number];
   triggerIncreaseShowCntRef?: React.RefObject<HTMLAnchorElement>;
 }
-const PokeDexListItem = ({
-  pokemonInfo,
-  triggerIncreaseShowCntRef,
-}: IPokemonCard) => {
-  const pokemonNum = Number(getPokemonNumFromUrl(pokemonInfo.url));
+const PokeDexListItem = ({ pokemonInfo, triggerIncreaseShowCntRef }: IPokemonCard) => {
+  const pokemonNum = getPokemonNumFromUrl(pokemonInfo.url);
 
   return (
-    <PokeDexListItemWrapper
-      to={`${PAGE_URL.POKE_DEX}/${pokemonNum}`}
-      ref={triggerIncreaseShowCntRef}
-    >
-      <PokeDexListItemImg
-        src={createPokemonImgPath(pokemonNum)}
-        alt={pokemonInfo.name}
-      />
+    <PokeDexListItemWrapper to={`${PAGE_URL.POKE_DEX}/${pokemonNum}`} ref={triggerIncreaseShowCntRef}>
+      <PokeDexListItemImg src={createPokemonImgPath(pokemonNum)} alt={pokemonInfo.name} />
       <PokeDexListItemName>
         No.{pokemonNum}
         <br />

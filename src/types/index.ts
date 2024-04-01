@@ -14,6 +14,18 @@ export type Pokemon = {
   sprites: {
     front_default: string;
   };
+  abilities: Array<{
+    ability: { name: string; url: string };
+  }>;
+  types: Array<{
+    type: { name: string; url: string };
+  }>;
+};
+
+export type Species = {
+  evolution_chain: {
+    url: string;
+  };
 };
 
 type Chain = {

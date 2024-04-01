@@ -1,5 +1,5 @@
 // Style
-import * as S from 'styles/poke-dex';
+import * as S from 'styles/pokeDexList';
 
 // API
 import { useGetPokemonList } from 'apis/poke-dex';

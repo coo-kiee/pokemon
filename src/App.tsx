@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
@@ -12,11 +13,9 @@ import GlobalStyle from 'styles/GlobalStyle';
 
 // Component
 import Layout from 'components/Layout';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import PokeDexDetail from 'pages/poke-dex/detail';
 
 const Home = lazy(() => import('pages/home'));
-const PokeDexList = lazy(() => import('pages/poke-dex/list'));
+const PokeDex = lazy(() => import('pages/poke-dex'));
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -37,8 +36,8 @@ const App = () => {
     createRoutesFromElements(
       <Route element={<Layout />}>
         <Route path={PAGE_URL.HOEM} element={<Home />} />,
-        <Route path={PAGE_URL.POKE_DEX} element={<PokeDexList />} />
-        <Route path={`${PAGE_URL.POKE_DEX}/:id`} element={<PokeDexDetail />} />
+        <Route path={PAGE_URL.POKE_DEX} element={<PokeDex />} />
+        <Route path={`${PAGE_URL.POKE_DEX}/:id`} element={<PokeDex />} />
       </Route>,
     ),
   );

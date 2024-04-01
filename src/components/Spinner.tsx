@@ -1,11 +1,12 @@
-import { FC } from 'react';
-
 // Style
 import * as S from 'styles/spinner';
 
-const Spinner: FC = () => {
+interface ISpinner {
+  isPopup?: boolean;
+}
+const Spinner = ({ isPopup }: ISpinner) => {
   return (
-    <S.SpinnerLayout>
+    <S.SpinnerLayout $isPopup={isPopup}>
       <S.PokeballOuter>
         <S.PokeballInnerTop />
         <S.PokeballOpenner />
