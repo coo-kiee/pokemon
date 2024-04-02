@@ -23,6 +23,8 @@ export type Pokemon = {
 };
 
 export type Species = {
+  id: number;
+  name: string;
   evolution_chain: {
     url: string;
   };

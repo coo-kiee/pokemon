@@ -4,15 +4,18 @@ import { PokemonList } from 'types';
 import { PokeDexListItemImg, PokeDexListItemName, PokeDexListItemWrapper } from 'styles/pokeDexList';
 
 // Util
-import { createPokemonImgPath } from 'utils/createPokemonImgPath';
-import { getPokemonNumFromUrl } from 'utils/getPokemonNumFromUrl';
+import { createPokemonImgPath } from 'utils/pokeDex/createPokemonImgPath';
+import { getPokemonNumFromUrl } from 'utils/pokeDex/getPokemonNumFromUrl';
 import { PAGE_URL } from 'consts/common';
+import useLang from 'hooks/useLang';
 
 interface IPokemonCard {
   pokemonInfo: PokemonList['results'][number];
   triggerIncreaseShowCntRef?: React.RefObject<HTMLAnchorElement>;
 }
 const PokeDexListItem = ({ pokemonInfo, triggerIncreaseShowCntRef }: IPokemonCard) => {
+  const { convertLang } = useLang();
+
   const pokemonNum = getPokemonNumFromUrl(pokemonInfo.url);
 
   return (
@@ -21,7 +24,7 @@ const PokeDexListItem = ({ pokemonInfo, triggerIncreaseShowCntRef }: IPokemonCar
       <PokeDexListItemName>
         No.{pokemonNum}
         <br />
-        {pokemonInfo.name}
+        {convertLang('names', pokemonInfo.name)}
       </PokeDexListItemName>
     </PokeDexListItemWrapper>
   );

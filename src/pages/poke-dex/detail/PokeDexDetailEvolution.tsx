@@ -1,22 +1,27 @@
 // API
 import { useGetEvolutionChain } from 'apis/poke-dex';
 
+// Hook
+import useLang from 'hooks/useLang';
+
 // Util
-import { extractPokemonEvolution } from 'utils/extractPokemonEvolution';
+import { extractPokemonEvolution } from 'utils/pokeDex/extractPokemonEvolution';
 
 // Component
 import PokeDexDetailDescription from './PokeDexDetailDescription';
 
 interface IPokeDexDetailEvolution {
   evolutionNum: number;
-  pokemonName: string;
 }
-const PokeDexDetailEvolution = ({ evolutionNum, pokemonName }: IPokeDexDetailEvolution) => {
+const PokeDexDetailEvolution = ({ evolutionNum }: IPokeDexDetailEvolution) => {
+  const { convertLangs } = useLang();
+
   // Fetch
   const { data: evolutionChain } = useGetEvolutionChain(evolutionNum);
-  const evolutionChains = extractPokemonEvolution(evolutionChain.chain, [pokemonName]);
+  console.log(evolutionChain.chain);
+  const evolutionChains = extractPokemonEvolution(evolutionChain.chain);
 
-  return <PokeDexDetailDescription title="진화정보" text={evolutionChains.join('-')} />;
+  return <PokeDexDetailDescription title="진화정보" text={convertLangs('names', evolutionChains).join('-')} />;
 };
 
 export default PokeDexDetailEvolution;

@@ -12,14 +12,17 @@
 
 ### - Package Manager: Yarn berry 3.3.1
 
+### - DataFetch: Tanstack/React-Query ^5.28.9
+
 ### - DevTool: Vite
 
 ### - Lib:
 
-- React
+- react
 - axios
-- Zustand
-- Styled-Components
+- zustand
+- styled-components
+- tanstack/react-query
 
 <br/>
 

@@ -2,7 +2,7 @@
 import { PokemonList } from 'types';
 
 // Util
-import { getPokemonNumFromUrl } from 'utils/getPokemonNumFromUrl';
+import { getPokemonNumFromUrl } from 'utils/pokeDex/getPokemonNumFromUrl';
 
 const useFindPokemon = (pokemonList: PokemonList, searchPokemonNum: number) => {
   const findPokemon = pokemonList.results.find((item) => getPokemonNumFromUrl(item.url) === searchPokemonNum);

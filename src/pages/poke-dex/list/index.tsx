@@ -35,7 +35,9 @@ const PokeDexList = () => {
           placeholder="포켓몬 번호를 입력하세요"
           onChange={checkInputNumber}
         />
-        <S.PokeDexListSearchButton type="button">검색</S.PokeDexListSearchButton>
+        <S.PokeDexListSearchButton type="button" onClick={handleSearchPokemonNum}>
+          검색
+        </S.PokeDexListSearchButton>
       </S.PokeDexListSearchBox>
       <S.PokeDexListWrapper>
         {renderList

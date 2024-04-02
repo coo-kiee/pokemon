@@ -5,13 +5,17 @@ import { ThemeProvider } from 'styled-components';
 
 // Const
 import { PAGE_URL } from 'consts/common';
-import Spinner from 'components/Spinner';
 
 // Style
 import theme from 'styles/theme';
 import GlobalStyle from 'styles/GlobalStyle';
 
+// Hook
+import useCreateAllLang from 'hooks/useCreateAllLang';
+import useSettingLang from 'hooks/useSettingLang';
+
 // Component
+import Spinner from 'components/Spinner';
 import Layout from 'components/Layout';
 
 const Home = lazy(() => import('pages/home'));
@@ -41,6 +45,10 @@ const App = () => {
       </Route>,
     ),
   );
+
+  useCreateAllLang();
+
+  useSettingLang();
 
   return (
     <ThemeProvider theme={theme}>
