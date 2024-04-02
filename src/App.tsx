@@ -14,6 +14,9 @@ import GlobalStyle from 'styles/GlobalStyle';
 import useCreateAllLang from 'hooks/useCreateAllLang';
 import useSettingLang from 'hooks/useSettingLang';
 
+// Provider
+import MetaProvider from 'components/seo/MetaProvider';
+
 // Component
 import Spinner from 'components/Spinner';
 import Layout from 'components/Layout';
@@ -51,14 +54,16 @@ const App = () => {
   useSettingLang();
 
   return (
-    <ThemeProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <GlobalStyle />
-        <Suspense fallback={<Spinner />}>
-          <RouterProvider router={router} />
-        </Suspense>
-      </QueryClientProvider>
-    </ThemeProvider>
+    <MetaProvider>
+      <ThemeProvider theme={theme}>
+        <QueryClientProvider client={queryClient}>
+          <GlobalStyle />
+          <Suspense fallback={<Spinner />}>
+            <RouterProvider router={router} />
+          </Suspense>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </MetaProvider>
   );
 };
 

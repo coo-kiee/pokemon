@@ -50,6 +50,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["prettier", "npm:3.2.5"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:18.2.0"],\
+            ["react-helmet-async", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:2.0.4"],\
             ["react-router-dom", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:6.22.3"],\
             ["styled-components", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:6.1.8"],\
             ["typescript", "patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=ad5954"],\
@@ -3608,6 +3609,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["invariant", [\
+        ["npm:2.2.4", {\
+          "packageLocation": "./.yarn/cache/invariant-npm-2.2.4-717fbdb119-cc3182d793.zip/node_modules/invariant/",\
+          "packageDependencies": [\
+            ["invariant", "npm:2.2.4"],\
+            ["loose-envify", "npm:1.4.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["ip-address", [\
         ["npm:9.0.5", {\
           "packageLocation": "./.yarn/cache/ip-address-npm-9.0.5-9fa024d42a-aa15f12cfd.zip/node_modules/ip-address/",\
@@ -4679,6 +4690,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["prettier", "npm:3.2.5"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:18.2.0"],\
+            ["react-helmet-async", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:2.0.4"],\
             ["react-router-dom", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:6.22.3"],\
             ["styled-components", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:6.1.8"],\
             ["typescript", "patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=ad5954"],\
@@ -4845,6 +4857,44 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "packagePeers": [\
             "@types/react",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["react-fast-compare", [\
+        ["npm:3.2.2", {\
+          "packageLocation": "./.yarn/cache/react-fast-compare-npm-3.2.2-45b585a872-2071415b4f.zip/node_modules/react-fast-compare/",\
+          "packageDependencies": [\
+            ["react-fast-compare", "npm:3.2.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["react-helmet-async", [\
+        ["npm:2.0.4", {\
+          "packageLocation": "./.yarn/cache/react-helmet-async-npm-2.0.4-cdcbc49056-1bd16e6be6.zip/node_modules/react-helmet-async/",\
+          "packageDependencies": [\
+            ["react-helmet-async", "npm:2.0.4"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:2.0.4", {\
+          "packageLocation": "./.yarn/__virtual__/react-helmet-async-virtual-27cf393441/0/cache/react-helmet-async-npm-2.0.4-cdcbc49056-1bd16e6be6.zip/node_modules/react-helmet-async/",\
+          "packageDependencies": [\
+            ["react-helmet-async", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:2.0.4"],\
+            ["@types/react", "npm:18.2.73"],\
+            ["@types/react-dom", "npm:18.2.23"],\
+            ["invariant", "npm:2.2.4"],\
+            ["react", "npm:18.2.0"],\
+            ["react-dom", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:18.2.0"],\
+            ["react-fast-compare", "npm:3.2.2"],\
+            ["shallowequal", "npm:1.1.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/react-dom",\
+            "@types/react",\
+            "react-dom",\
             "react"\
           ],\
           "linkType": "HARD"\

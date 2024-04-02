@@ -1,0 +1,3 @@
+# https://www.robotstxt.org/robotstxt.html
+Sitemap: https://www.pokeapi.com/sitemap.xml
+User-agent: *

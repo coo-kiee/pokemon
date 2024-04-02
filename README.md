@@ -6,7 +6,7 @@
 
 ## Setting
 
-### - VS Code version ^1.82.0
+### - VS Code version: ^1.82.0
 
 ### - Node Version: v16.14.0
 
@@ -40,6 +40,8 @@
 
 ```
 $ yarn
+
+# yarn dlx @yarnpkg/sdks vscode
 
 $ yarn dev
 ```
