@@ -2,6 +2,7 @@ import { styled } from 'styled-components';
 import { PokeDexListSearchButton } from './pokeDexList';
 
 export const PokeDexDetailContainer = styled.div`
+  ${(props) => props.theme.size.vFull}
   ${(props) => props.theme.sort.centerColumn}
 `;
 
@@ -39,15 +40,22 @@ export const PokeDexDetailFunctionBox = styled.div`
   padding: 20px 0;
   margin-left: -40px;
   width: 600px;
+`;
+
+export const PokeDexDetailListBtn = styled(PokeDexListSearchButton)`
+  background-color: #ffc9c9;
+  border: 1px solid transparent;
 
   a {
     color: ${(props) => props.theme.color.white};
-    &:hover {
-      border-color: #e95e5e;
-      background-color: #e95e5e;
-      color: ${(props) => props.theme.color.black};
+  }
+
+  &:hover {
+    background-color: #ffc9c9;
+    border: 1px solid #747bff;
+
+    a {
+      color: #747bff;
     }
   }
 `;
-
-export const PokeDexDetailListBtn = styled(PokeDexListSearchButton)``;

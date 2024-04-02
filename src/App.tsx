@@ -54,7 +54,7 @@ const App = () => {
             <Suspense fallback={<Spinner />}>
               <Routes>
                 <Route element={<Layout />}>
-                  <Route path={PAGE_URL.HOEM} element={<Home />} />,
+                  <Route path={PAGE_URL.HOEM} element={<Home />} />
                   <Route path={PAGE_URL.POKE_DEX} element={<PokeDex />} />
                   <Route path={`${PAGE_URL.POKE_DEX}/:id`} element={<PokeDex />} />
                 </Route>

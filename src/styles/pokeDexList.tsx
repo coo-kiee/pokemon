@@ -13,6 +13,33 @@ export const PokeDexListTitle = styled.h2`
   text-align: center;
 `;
 
+export const PokeDexListTopBox = styled.div`
+  position: sticky;
+  top: 0;
+  ${(props) => props.theme.sort.center}
+  padding: 10px 0;
+  background-color: ${(props) => props.theme.color.white};
+`;
+
+export const PokeDexListTopFuction = styled.div`
+  position: absolute;
+  left: 0;
+  margin-left: 20px;
+
+  button {
+    background-color: #ffc9c9;
+    a {
+      color: ${(props) => props.theme.color.white};
+      font-weight: 700;
+
+      &: hover {
+        color: #747bff;;
+      }
+    }
+  }
+}
+`;
+
 export const PokeDexListSearchBox = styled(Form)`
   display: flex;
   align-items: center;

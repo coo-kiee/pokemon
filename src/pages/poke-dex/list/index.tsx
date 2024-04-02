@@ -16,6 +16,8 @@ import { checkInputNumber } from 'utils/checkInputNumber';
 
 // Context
 import TopBtn from 'components/TopBtn';
+import { Link } from 'react-router-dom';
+import { PAGE_URL } from 'consts/common';
 import { ShowCntContext } from '../ShowCntProvider';
 
 // Component
@@ -35,18 +37,25 @@ const PokeDexList = () => {
   return (
     <S.PokeDexListContainer>
       <S.PokeDexListTitle>포켓몬 도감</S.PokeDexListTitle>
-      <S.PokeDexListSearchBox onSubmit={handleSearchPokemonNum}>
-        <S.PokeDexListSearchInputLabel>포켓몬 검색</S.PokeDexListSearchInputLabel>
-        <S.PokeDexListSearchInput
-          ref={searchInputRef}
-          type="text"
-          placeholder="포켓몬 번호를 입력하세요"
-          onChange={checkInputNumber}
-        />
-        <S.PokeDexListSearchButton type="button" onClick={handleSearchPokemonNum}>
-          검색
-        </S.PokeDexListSearchButton>
-      </S.PokeDexListSearchBox>
+      <S.PokeDexListTopBox>
+        <S.PokeDexListTopFuction>
+          <button type="button">
+            <Link to={PAGE_URL.HOEM}>홈으로</Link>
+          </button>
+        </S.PokeDexListTopFuction>
+        <S.PokeDexListSearchBox onSubmit={handleSearchPokemonNum}>
+          <S.PokeDexListSearchInputLabel>포켓몬 검색</S.PokeDexListSearchInputLabel>
+          <S.PokeDexListSearchInput
+            ref={searchInputRef}
+            type="text"
+            placeholder="포켓몬 번호를 입력하세요"
+            onChange={checkInputNumber}
+          />
+          <S.PokeDexListSearchButton type="button" onClick={handleSearchPokemonNum}>
+            검색
+          </S.PokeDexListSearchButton>
+        </S.PokeDexListSearchBox>
+      </S.PokeDexListTopBox>
       <S.PokeDexListWrapper>
         {renderList
           ?.filter((_, index) => index < showCnt)
