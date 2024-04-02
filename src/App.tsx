@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
 // Const
@@ -20,6 +20,7 @@ import MetaProvider from 'components/seo/MetaProvider';
 // Component
 import Spinner from 'components/Spinner';
 import Layout from 'components/Layout';
+import Seo from 'components/seo';
 
 const Home = lazy(() => import('pages/home'));
 const PokeDex = lazy(() => import('pages/poke-dex'));
@@ -39,16 +40,6 @@ const App = () => {
     },
   });
 
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route element={<Layout />}>
-        <Route path={PAGE_URL.HOEM} element={<Home />} />,
-        <Route path={PAGE_URL.POKE_DEX} element={<PokeDex />} />
-        <Route path={`${PAGE_URL.POKE_DEX}/:id`} element={<PokeDex />} />
-      </Route>,
-    ),
-  );
-
   useCreateAllLang();
 
   useSettingLang();
@@ -58,9 +49,18 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
           <GlobalStyle />
-          <Suspense fallback={<Spinner />}>
-            <RouterProvider router={router} />
-          </Suspense>
+          <BrowserRouter>
+            <Seo />
+            <Suspense fallback={<Spinner />}>
+              <Routes>
+                <Route element={<Layout />}>
+                  <Route path={PAGE_URL.HOEM} element={<Home />} />,
+                  <Route path={PAGE_URL.POKE_DEX} element={<PokeDex />} />
+                  <Route path={`${PAGE_URL.POKE_DEX}/:id`} element={<PokeDex />} />
+                </Route>
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
         </QueryClientProvider>
       </ThemeProvider>
     </MetaProvider>
