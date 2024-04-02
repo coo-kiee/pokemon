@@ -11,6 +11,7 @@ export type PokemonList = {
 export type Pokemon = {
   id: number;
   name: string;
+  weight: number;
   sprites: {
     front_default: string;
   };
@@ -19,6 +20,13 @@ export type Pokemon = {
   }>;
   types: Array<{
     type: { name: string; url: string };
+  }>;
+  stats: Array<{
+    base_stat: number;
+    stat: { name: string; url: string };
+  }>;
+  moves: Array<{
+    move: { name: string; url: string };
   }>;
 };
 

@@ -10,7 +10,7 @@ import { PAGE_URL } from 'consts/common';
 import { useGetPokemon, useGetSpecies } from 'apis/poke-dex';
 
 // Util
-import { extractPokemonInfo } from 'utils/pokeDex/extractPokemonInfo';
+import { extractPokemonInfo, extractPokemonStat } from 'utils/pokeDex/extractPokemonInfo';
 import { getPokemonNumFromUrl } from 'utils/pokeDex/getPokemonNumFromUrl';
 
 // Hook
@@ -33,6 +33,8 @@ const PokeDexDetail = ({ pokemonId }: IPokeDexDetail) => {
 
   const abilities = extractPokemonInfo(pokemon.abilities, 'ability');
   const types = extractPokemonInfo(pokemon.types, 'type');
+  const moves = extractPokemonInfo(pokemon.moves, 'move');
+  const [statNames, baseStats] = extractPokemonStat(pokemon.stats);
 
   return (
     <S.PokeDexDetailContainer>
@@ -41,7 +43,15 @@ const PokeDexDetail = ({ pokemonId }: IPokeDexDetail) => {
       <PokeDexDetailDescription title="이름" text={convertLang('names', pokemon.name)} />
       <PokeDexDetailDescription title="능력" text={convertLangs('abilities', abilities).join(', ')} />
       <PokeDexDetailDescription title="타입" text={convertLangs('types', types).join(', ')} />
+      <PokeDexDetailDescription title="무게" text={String(pokemon.weight)} />
       <PokeDexDetailEvolution pokemonId={pokemonId} evolutionId={evolutionNum} />
+      <PokeDexDetailDescription
+        title="스탯"
+        text={convertLangs('stats', statNames)
+          .map((statName, idx) => `${statName}: ${baseStats[idx]}`)
+          .join('\n')}
+      />
+      <PokeDexDetailDescription title="기술" text={convertLangs('moves', moves).join(', ')} />
       <S.PokeDexDetailFunctionBox>
         <S.PokeDexDetailListBtn>
           <Link to={PAGE_URL.POKE_DEX}>목록</Link>

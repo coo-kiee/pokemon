@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import { PokeDexListSearchButton } from './pokeDexList';
 
 export const PokeDexDetailContainer = styled.div`
-  ${(props) => props.theme.size.vFull}
+  ${(props) => props.theme.size.full}
   ${(props) => props.theme.sort.centerColumn}
 `;
 
@@ -28,6 +28,7 @@ export const PokeDexDetailLabel = styled.label`
 `;
 
 export const PokeDexDetailText = styled.span`
+  white-space: pre-line;
   padding-left: 20px;
   width: 400px;
   font-size: 24px;

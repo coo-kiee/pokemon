@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import * as S from 'styles/pokeDexDetail';
 
 // API
@@ -29,11 +30,11 @@ const PokeDexDetailEvolution = ({ pokemonId, evolutionId }: IPokeDexDetailEvolut
 
   return (
     <PokeDexDetailDescription
-      title="진화정보"
+      title="진화"
       render={() => (
         <S.PokeDexDetailEvolutionBox>
           {evolutionSpecies.map((species, idx) => (
-            <>
+            <Fragment key={species.name}>
               {idx > 0 ? '-' : ''}
               <S.PokeDexEvolutionLink
                 to={`${PAGE_URL.POKE_DEX}/${getPokemonNumFromUrl(species.url)}`}
@@ -41,7 +42,7 @@ const PokeDexDetailEvolution = ({ pokemonId, evolutionId }: IPokeDexDetailEvolut
               >
                 {convertLang('names', species.name)}
               </S.PokeDexEvolutionLink>
-            </>
+            </Fragment>
           ))}
         </S.PokeDexDetailEvolutionBox>
       )}
