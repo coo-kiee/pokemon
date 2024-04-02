@@ -41,7 +41,7 @@ const PokeDexDetail = ({ pokemonId }: IPokeDexDetail) => {
       <PokeDexDetailDescription title="이름" text={convertLang('names', pokemon.name)} />
       <PokeDexDetailDescription title="능력" text={convertLangs('abilities', abilities).join(', ')} />
       <PokeDexDetailDescription title="타입" text={convertLangs('types', types).join(', ')} />
-      <PokeDexDetailEvolution evolutionNum={evolutionNum} />
+      <PokeDexDetailEvolution pokemonId={pokemonId} evolutionId={evolutionNum} />
       <S.PokeDexDetailFunctionBox>
         <S.PokeDexDetailListBtn>
           <Link to={PAGE_URL.POKE_DEX}>목록</Link>

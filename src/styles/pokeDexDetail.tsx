@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { PokeDexListSearchButton } from './pokeDexList';
 
@@ -52,10 +53,25 @@ export const PokeDexDetailListBtn = styled(PokeDexListSearchButton)`
 
   &:hover {
     background-color: #ffc9c9;
-    border: 1px solid #747bff;
+    border: 1px solid ${(props) => props.theme.color.blue};
 
     a {
-      color: #747bff;
+      color: ${(props) => props.theme.color.blue};
     }
+  }
+`;
+
+export const PokeDexDetailEvolutionBox = styled.div`
+  padding-left: 20px;
+  width: 400px;
+  font-size: 24px;
+  font-weight: 400;
+  ${(props) => props.theme.sort.textCenter}
+`;
+export const PokeDexEvolutionLink = styled(Link)<{ $isCurrent: boolean }>`
+  color: ${(props) => (props.$isCurrent ? props.theme.color.red : props.theme.color.black)};
+
+  &:hover {
+    color: ${(props) => props.theme.color.blue};
   }
 `;
