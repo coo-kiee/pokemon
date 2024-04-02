@@ -1,7 +1,8 @@
 import { lazy, Suspense } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
+import { ErrorBoundary } from 'react-error-boundary';
 
 // Const
 import { PAGE_URL } from 'consts/common';
@@ -21,11 +22,14 @@ import MetaProvider from 'components/seo/MetaProvider';
 import Spinner from 'components/Spinner';
 import Layout from 'components/Layout';
 import Seo from 'components/seo';
+import ErrorFallback from 'components/error';
 
 const Home = lazy(() => import('pages/home'));
 const PokeDex = lazy(() => import('pages/poke-dex'));
 
 const App = () => {
+  const { reset } = useQueryErrorResetBoundary();
+
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -51,15 +55,17 @@ const App = () => {
           <GlobalStyle />
           <BrowserRouter>
             <Seo />
-            <Suspense fallback={<Spinner />}>
-              <Routes>
-                <Route element={<Layout />}>
-                  <Route path={PAGE_URL.HOEM} element={<Home />} />
-                  <Route path={PAGE_URL.POKE_DEX} element={<PokeDex />} />
-                  <Route path={`${PAGE_URL.POKE_DEX}/:id`} element={<PokeDex />} />
-                </Route>
-              </Routes>
-            </Suspense>
+            <ErrorBoundary onReset={reset} fallbackRender={ErrorFallback}>
+              <Suspense fallback={<Spinner />}>
+                <Routes>
+                  <Route element={<Layout />}>
+                    <Route path={PAGE_URL.HOEM} element={<Home />} />
+                    <Route path={PAGE_URL.POKE_DEX} element={<PokeDex />} />
+                    <Route path={`${PAGE_URL.POKE_DEX}/:id`} element={<PokeDex />} />
+                  </Route>
+                </Routes>
+              </Suspense>
+            </ErrorBoundary>
           </BrowserRouter>
         </QueryClientProvider>
       </ThemeProvider>

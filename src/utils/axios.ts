@@ -20,14 +20,14 @@ DEFAULT_AXIOS_INSTANCE.interceptors.response.use(
     return response;
   },
   (err) => {
-    return err;
+    throw err;
   },
 );
 
 const get = async <T>(url: string, config?: AxiosRequestConfig<unknown>) => {
   const res = await DEFAULT_AXIOS_INSTANCE.get<T>(url, config);
 
-  return res?.data;
+  return res.data;
 };
 
 const Axios = {
