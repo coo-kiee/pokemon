@@ -6,20 +6,23 @@
 
 ## Setting
 
-### - VS Code version ^1.82.0
+### - VS Code version: ^1.82.0
 
 ### - Node Version: v16.14.0
 
 ### - Package Manager: Yarn berry 3.3.1
 
+### - DataFetch: Tanstack/React-Query ^5.28.9
+
 ### - DevTool: Vite
 
 ### - Lib:
 
-- React
+- react
 - axios
-- Zustand
-- Styled-Components
+- zustand
+- styled-components
+- tanstack/react-query
 
 <br/>
 
@@ -37,6 +40,8 @@
 
 ```
 $ yarn
+
+# yarn dlx @yarnpkg/sdks vscode
 
 $ yarn dev
 ```

@@ -1,7 +1,8 @@
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
+import { POKE_API_URL } from 'consts/common';
 
 const DEFAULT_AXIOS_INSTANCE = axios.create({
-  baseURL: 'https://pokeapi.co/api/v2/',
+  baseURL: POKE_API_URL,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded',
     Accept: 'application/json; charset=UTF-8',
@@ -19,16 +20,12 @@ DEFAULT_AXIOS_INSTANCE.interceptors.response.use(
     return response;
   },
   (err) => {
-    if (err instanceof AxiosError) {
-      throw Error(`[ERROR_ ${err.response?.status}]\n ${err.response?.data || err?.message}`);
-    } else if (err instanceof Error) throw Error(err.message);
-
-    throw Error(String(err));
+    throw err;
   },
 );
 
-const get = async (url: string, config?: AxiosRequestConfig<unknown>) => {
-  const res = await DEFAULT_AXIOS_INSTANCE.get(url, config);
+const get = async <T>(url: string, config?: AxiosRequestConfig<unknown>) => {
+  const res = await DEFAULT_AXIOS_INSTANCE.get<T>(url, config);
 
   return res.data;
 };

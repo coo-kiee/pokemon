@@ -1,40 +1,75 @@
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider, useQueryErrorResetBoundary } from '@tanstack/react-query';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
+import { ErrorBoundary } from 'react-error-boundary';
 
 // Const
 import { PAGE_URL } from 'consts/common';
-import Spinner from 'pages/common/Spinner';
 
 // Style
 import theme from 'styles/theme';
 import GlobalStyle from 'styles/GlobalStyle';
 
+// Hook
+import useCreateAllLang from 'hooks/useCreateAllLang';
+import useSettingLang from 'hooks/useSettingLang';
+
+// Provider
+import MetaProvider from 'components/seo/MetaProvider';
+
 // Component
-import Layout from 'pages/common/Layout';
+import Spinner from 'components/Spinner';
+import Layout from 'components/Layout';
+import Seo from 'components/seo';
+import ErrorFallback from 'components/error';
 
 const Home = lazy(() => import('pages/home'));
 const PokeDex = lazy(() => import('pages/poke-dex'));
 
 const App = () => {
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route element={<Layout />}>
-        <Route path={PAGE_URL.HOEM} element={<Home />} />,
-        <Route path={PAGE_URL.POKE_DEX} element={<PokeDex />}>
-          <Route path=":id" element={<div>DETAIL</div>} />
-        </Route>
-      </Route>,
-    ),
-  );
+  const { reset } = useQueryErrorResetBoundary();
+
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchInterval: false,
+        refetchOnMount: false,
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
+        retry: 0,
+        staleTime: Infinity,
+        gcTime: Infinity,
+      },
+    },
+  });
+
+  useCreateAllLang();
+
+  useSettingLang();
 
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <Suspense fallback={<Spinner />}>
-        <RouterProvider router={router} />
-      </Suspense>
-    </ThemeProvider>
+    <MetaProvider>
+      <ThemeProvider theme={theme}>
+        <QueryClientProvider client={queryClient}>
+          <GlobalStyle />
+          <BrowserRouter>
+            <Seo />
+            <ErrorBoundary onReset={reset} fallbackRender={ErrorFallback}>
+              <Suspense fallback={<Spinner />}>
+                <Routes>
+                  <Route element={<Layout />}>
+                    <Route path={PAGE_URL.HOEM} element={<Home />} />
+                    <Route path={PAGE_URL.POKE_DEX} element={<PokeDex />} />
+                    <Route path={`${PAGE_URL.POKE_DEX}/:id`} element={<PokeDex />} />
+                  </Route>
+                </Routes>
+              </Suspense>
+            </ErrorBoundary>
+          </BrowserRouter>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </MetaProvider>
   );
 };
 

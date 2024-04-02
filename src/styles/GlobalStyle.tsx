@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
     #root {
-        ${(props) => props.theme.common.full}
+        ${(props) => props.theme.size.vFull}
     }
 `;
 

@@ -15,9 +15,13 @@ module.exports = {
   },
   ignorePatterns: ['dist', '.eslintrc.cjs', '*.config.*'],
   rules: {
+    '@typescript-eslint/no-unused-vars': 'warn',
     'prettier/prettier': 'off',
     'no-console': 'off',
+    'no-restricted-syntax': 'off',
     'react/react-in-jsx-scope': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'react/require-default-props': 'off',
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'react/function-component-definition': [2, { namedComponents: 'arrow-function' }],
     'import/prefer-default-export': 'off',

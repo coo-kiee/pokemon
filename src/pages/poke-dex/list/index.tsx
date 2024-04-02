@@ -1,0 +1,76 @@
+import { useContext } from 'react';
+
+// Style
+import * as S from 'styles/pokeDexList';
+
+// API
+import { useGetPokemonList } from 'apis/poke-dex';
+
+// Hook
+import useSearchPokemonNum from 'hooks/useSearchPokemonNum';
+import useShowCnt from 'hooks/useShowCnt';
+import useFindPokemon from 'hooks/useSearchPokemon';
+
+// Util
+import { checkInputNumber } from 'utils/checkInputNumber';
+
+// Context
+import TopBtn from 'components/TopBtn';
+import { Link } from 'react-router-dom';
+import { PAGE_URL } from 'consts/common';
+import { ShowCntContext } from '../ShowCntProvider';
+
+// Component
+import PokeDexListItem from './PokeDexListItem';
+
+const PokeDexList = () => {
+  const showCnt = useContext(ShowCntContext);
+
+  const { triggerIncreaseShowCntRef } = useShowCnt();
+  const { searchInputRef, searchPokemonNum, handleSearchPokemonNum } = useSearchPokemonNum();
+
+  // Fetch
+  const { data: pokemonList } = useGetPokemonList();
+
+  const { renderList } = useFindPokemon(pokemonList, searchPokemonNum);
+
+  return (
+    <S.PokeDexListContainer>
+      <S.PokeDexListTitle>포켓몬 도감</S.PokeDexListTitle>
+      <S.PokeDexListTopBox>
+        <S.PokeDexListTopFuction>
+          <button type="button">
+            <Link to={PAGE_URL.HOEM}>홈으로</Link>
+          </button>
+        </S.PokeDexListTopFuction>
+        <S.PokeDexListSearchBox onSubmit={handleSearchPokemonNum}>
+          <S.PokeDexListSearchInputLabel>포켓몬 검색</S.PokeDexListSearchInputLabel>
+          <S.PokeDexListSearchInput
+            ref={searchInputRef}
+            type="text"
+            placeholder="포켓몬 번호를 입력하세요"
+            onChange={checkInputNumber}
+          />
+          <S.PokeDexListSearchButton type="button" onClick={handleSearchPokemonNum}>
+            검색
+          </S.PokeDexListSearchButton>
+        </S.PokeDexListSearchBox>
+      </S.PokeDexListTopBox>
+      <S.PokeDexListWrapper>
+        {renderList
+          ?.filter((_, index) => index < showCnt)
+          .map((item, index) => (
+            <PokeDexListItem
+              key={item.name}
+              pokemonInfo={item}
+              triggerIncreaseShowCntRef={index + 1 === showCnt ? triggerIncreaseShowCntRef : undefined}
+            />
+          ))}
+        {!renderList && <S.PokeDexListNone>검색 결과가 없습니다.</S.PokeDexListNone>}
+      </S.PokeDexListWrapper>
+      <TopBtn />
+    </S.PokeDexListContainer>
+  );
+};
+
+export default PokeDexList;

@@ -1,14 +1,13 @@
-import { Link } from 'react-router-dom';
+import * as S from 'styles/home';
 
 // URL
 import { PAGE_URL } from 'consts/common';
 
 const Home = () => {
   return (
-    <>
-      <div>HOME</div>
-      <Link to={PAGE_URL.POKE_DEX}>PokeDEx</Link>
-    </>
+    <S.HomeContainer>
+      <S.MenuNav to={PAGE_URL.POKE_DEX}>도감</S.MenuNav>
+    </S.HomeContainer>
   );
 };
 

@@ -5,12 +5,11 @@ const spinner = keyframes`
   to {transform: rotate(360deg); }
 `;
 
-export const SpinnerLayout = styled.div`
+export const SpinnerLayout = styled.div<{ $isPopup?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
+  ${(props) => (props.$isPopup ? props.theme.size.vFull : props.theme.size.full)}
 `;
 
 export const PokeballOuter = styled(SpinnerLayout)`
