@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { isNaturalNumber } from 'utils/validation';
 import PokeDexDetail from './detail';
 import PokeDexList from './list';
+import ShowCntProvider from './ShowCntProvider';
 
 const PokeDex = () => {
   const navigate = useNavigate();
@@ -18,7 +19,9 @@ const PokeDex = () => {
     if (!pokemonNum) navigate(PAGE_URL.POKE_DEX, { replace: true });
   }, [pokemonNum, navigate]);
 
-  return pokemonNum > 0 ? <PokeDexDetail pokemonId={pokemonNum} /> : <PokeDexList />;
+  return (
+    <ShowCntProvider>{pokemonNum > 0 ? <PokeDexDetail pokemonId={pokemonNum} /> : <PokeDexList />}</ShowCntProvider>
+  );
 };
 
 export default PokeDex;

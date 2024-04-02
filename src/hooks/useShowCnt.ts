@@ -1,17 +1,22 @@
-import { useState, useRef } from 'react';
+import { useRef, useContext } from 'react';
+
+// Context
+import { SetShowCntContext } from 'pages/poke-dex/ShowCntProvider';
+
+// Hook
 import useIntersectionObserver from './useIntersectionObserver';
 
 const useShowCnt = () => {
   const triggerIncreaseShowCntRef = useRef<HTMLAnchorElement>(null);
 
-  const [showCnt, setShoCnt] = useState(50);
+  const setShowCnt = useContext(SetShowCntContext);
 
   useIntersectionObserver({
     target: triggerIncreaseShowCntRef,
-    callBack: () => setShoCnt((prev) => prev + 50),
+    callBack: () => setShowCnt((prev) => prev + 50),
   });
 
-  return { showCnt, triggerIncreaseShowCntRef };
+  return { triggerIncreaseShowCntRef };
 };
 
 export default useShowCnt;

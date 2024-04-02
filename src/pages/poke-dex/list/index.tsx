@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+
 // Style
 import * as S from 'styles/pokeDexList';
 
@@ -12,11 +14,17 @@ import useFindPokemon from 'hooks/useSearchPokemon';
 // Util
 import { checkInputNumber } from 'utils/checkInputNumber';
 
+// Context
+import TopBtn from 'components/TopBtn';
+import { ShowCntContext } from '../ShowCntProvider';
+
 // Component
 import PokeDexListItem from './PokeDexListItem';
 
 const PokeDexList = () => {
-  const { showCnt, triggerIncreaseShowCntRef } = useShowCnt();
+  const showCnt = useContext(ShowCntContext);
+
+  const { triggerIncreaseShowCntRef } = useShowCnt();
   const { searchInputRef, searchPokemonNum, handleSearchPokemonNum } = useSearchPokemonNum();
 
   // Fetch
@@ -51,6 +59,7 @@ const PokeDexList = () => {
           ))}
         {!renderList && <S.PokeDexListNone>검색 결과가 없습니다.</S.PokeDexListNone>}
       </S.PokeDexListWrapper>
+      <TopBtn />
     </S.PokeDexListContainer>
   );
 };
