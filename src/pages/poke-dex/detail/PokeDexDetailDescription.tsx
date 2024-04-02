@@ -1,15 +1,17 @@
 // Style
+import { ReactNode } from 'react';
 import * as S from 'styles/pokeDexDetail';
 
 interface IPokeDexDetailDescription {
   title: string;
-  text: string;
+  text?: string;
+  render?: () => ReactNode;
 }
-const PokeDexDetailDescription = ({ title, text }: IPokeDexDetailDescription) => {
+const PokeDexDetailDescription = ({ title, text, render }: IPokeDexDetailDescription) => {
   return (
     <S.PokeDetailTextBox>
       <S.PokeDexDetailLabel>{title}</S.PokeDexDetailLabel>
-      <S.PokeDexDetailText>{text}</S.PokeDexDetailText>
+      {render ? render() : <S.PokeDexDetailText>{text}</S.PokeDexDetailText>}
     </S.PokeDetailTextBox>
   );
 };

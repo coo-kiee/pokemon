@@ -1,16 +1,19 @@
 // Type
 import { EvolutionChain } from 'types';
 
-export const extractPokemonEvolution = (chain: EvolutionChain['chain'], pokemonNames: string[] = []) => {
+export const extractPokemonEvolution = (
+  chain: EvolutionChain['chain'],
+  evolutionChains: EvolutionChain['chain']['species'][] = [],
+) => {
   const evolutionInfo = chain.evolves_to;
   const hasEvolutionInfo = chain.evolves_to.length;
 
   if (hasEvolutionInfo) {
-    pokemonNames.push(chain.species.name);
-    extractPokemonEvolution(evolutionInfo[0], pokemonNames);
+    evolutionChains.push(chain.species);
+    extractPokemonEvolution(evolutionInfo[0], evolutionChains);
   }
 
-  if (pokemonNames.length && !hasEvolutionInfo) pokemonNames.push(chain.species.name);
+  if (evolutionChains.length && !hasEvolutionInfo) evolutionChains.push(chain.species);
 
-  return pokemonNames;
+  return evolutionChains;
 };

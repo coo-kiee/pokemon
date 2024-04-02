@@ -9,7 +9,8 @@ import { FetchLangKey } from 'types/lang';
 const useCreateAllLang = () => {
   useEffect(() => {
     const fetch = async () => {
-      const types: FetchLangKey[] = ['ability', 'type', 'name'];
+      // const types: FetchLangKey[] = ['ability', 'type', 'name'];
+      const types: FetchLangKey[] = ['move', 'stats'];
 
       for await (const type of types) {
         setTimeout(() => {
