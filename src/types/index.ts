@@ -1,4 +1,4 @@
-export type PokemonList = {
+export type ListResult = {
   count: number;
   next: string;
   previous: string;
@@ -33,6 +33,12 @@ export type Pokemon = {
 export type Species = {
   id: number;
   name: string;
+  names: Array<{
+    name: string;
+    language: {
+      name: string;
+    };
+  }>;
   evolution_chain: {
     url: string;
   };

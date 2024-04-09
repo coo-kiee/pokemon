@@ -1,16 +1,16 @@
 // Type
-import { PokemonList } from 'types';
+import { ListResult } from 'types';
 
 // Util
 import { getPokemonNumFromUrl } from 'utils/pokeDex/getPokemonNumFromUrl';
 
-const useFindPokemon = (pokemonList: PokemonList, searchPokemonNum: number) => {
-  const findPokemon = pokemonList.results.find((item) => getPokemonNumFromUrl(item.url) === searchPokemonNum);
+const useFindPokemon = (pokemonList: ListResult['results'], searchPokemonNum: number) => {
+  const findPokemon = pokemonList.find((item) => getPokemonNumFromUrl(item.url) === searchPokemonNum);
 
   if (searchPokemonNum > 0 && findPokemon) return { renderList: [findPokemon] };
   if (searchPokemonNum > 0 && !findPokemon) return { renderList: undefined };
 
-  return { renderList: pokemonList.results };
+  return { renderList: pokemonList };
 };
 
 export default useFindPokemon;

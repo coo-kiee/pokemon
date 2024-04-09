@@ -1,4 +1,5 @@
-import { useContext } from 'react';
+import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 // Style
 import * as S from 'styles/pokeDexList';
@@ -8,30 +9,35 @@ import { useGetPokemonList } from 'apis/poke-dex';
 
 // Hook
 import useSearchPokemonNum from 'hooks/useSearchPokemonNum';
-import useShowCnt from 'hooks/useShowCnt';
 import useFindPokemon from 'hooks/useSearchPokemon';
+import useIntersectionObserver from 'hooks/useIntersectionObserver';
 
 // Util
 import { checkInputNumber } from 'utils/checkInputNumber';
 
-// Context
-import TopBtn from 'components/TopBtn';
-import { Link } from 'react-router-dom';
+// URL
 import { PAGE_URL } from 'consts/common';
-import { ShowCntContext } from '../ShowCntProvider';
 
 // Component
+import TopBtn from 'components/TopBtn';
 import PokeDexListItem from './PokeDexListItem';
 
 const PokeDexList = () => {
-  const showCnt = useContext(ShowCntContext);
-
-  const { triggerIncreaseShowCntRef } = useShowCnt();
-  const { searchInputRef, searchPokemonNum, handleSearchPokemonNum } = useSearchPokemonNum();
+  const listItemRef = useRef<HTMLAnchorElement>(null);
 
   // Fetch
-  const { data: pokemonList } = useGetPokemonList();
+  const {
+    data: { pokemonList },
+    fetchNextPage,
+  } = useGetPokemonList('ko');
 
+  // Next Fetch
+  useIntersectionObserver({
+    target: listItemRef,
+    callBack: fetchNextPage,
+  });
+
+  const { searchInputRef, searchPokemonNum, handleSearchPokemonNum } = useSearchPokemonNum();
   const { renderList } = useFindPokemon(pokemonList, searchPokemonNum);
 
   return (
@@ -57,15 +63,13 @@ const PokeDexList = () => {
         </S.PokeDexListSearchBox>
       </S.PokeDexListTopBox>
       <S.PokeDexListWrapper>
-        {renderList
-          ?.filter((_, index) => index < showCnt)
-          .map((item, index) => (
-            <PokeDexListItem
-              key={item.name}
-              pokemonInfo={item}
-              triggerIncreaseShowCntRef={index + 1 === showCnt ? triggerIncreaseShowCntRef : undefined}
-            />
-          ))}
+        {renderList?.map((item, index, arr) => (
+          <PokeDexListItem
+            key={item.name}
+            pokemonInfo={item}
+            listItemRef={index + 1 === arr.length ? listItemRef : undefined}
+          />
+        ))}
         {!renderList && <S.PokeDexListNone>검색 결과가 없습니다.</S.PokeDexListNone>}
       </S.PokeDexListWrapper>
       <TopBtn />
