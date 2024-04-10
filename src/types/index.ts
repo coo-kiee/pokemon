@@ -8,12 +8,19 @@ export type ListResult = {
   }>;
 };
 
+export type PokeDexList = Array<ListResult['results'][number] & { img: string }>;
+
 export type Pokemon = {
   id: number;
   name: string;
   weight: number;
   sprites: {
     front_default: string;
+    other: {
+      'official-artwork': {
+        front_default: string;
+      };
+    };
   };
   abilities: Array<{
     ability: { name: string; url: string };

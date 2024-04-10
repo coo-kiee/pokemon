@@ -1,4 +1,4 @@
-import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 // Const
 import { API_URL } from 'consts/common';
@@ -11,6 +11,7 @@ import Axios from 'utils/axios';
 
 const QUERY_KEY = {
   POKEMON_LIST: (lang: string, offset: number, limit: number) => ['pokemonList', lang, offset, limit],
+  POKEMON_LIST_ONE: (pokemonId: number) => ['pokemonList', pokemonId],
   POKEMON: (pokemonId: number) => ['pokemon', pokemonId],
   SPECIES: (pokemonId: number) => ['species', pokemonId],
   EVOLUTION_CHAIN: (evolutionNum: number) => ['evolutionChain', evolutionNum],
@@ -23,19 +24,28 @@ interface IGetPokemonList {
   limit: number;
 }
 const getPokemonList = async ({ lang, pokemonListUrl, offset, limit }: IGetPokemonList) => {
+  const pokemonReqs = Array.from({ length: limit }).map((_, idx) =>
+    Axios.get<Pokemon>(`${API_URL.POKEMON}/${offset + idx + 1}`),
+  );
+
   const speciesReqs = Array.from({ length: limit }).map((_, idx) =>
     Axios.get<Species>(`${API_URL.SPECIES}/${offset + idx + 1}`),
   );
 
-  const [{ results, next, previous }, ...speciesRes] = await Promise.all([
+  const [{ results, next, previous }, ...otherResults] = await Promise.all([
     Axios.get<ListResult>(pokemonListUrl, { baseURL: '' }),
-    ...(speciesReqs || []),
+    ...pokemonReqs,
+    ...speciesReqs,
   ]);
+
+  const pokemonRes = otherResults.slice(0, pokemonReqs.length) as Pokemon[];
+  const speciesRes = otherResults.slice(pokemonReqs.length) as Species[];
 
   return {
     results: results.map((result, idx) => ({
       ...result,
       name: speciesRes[idx].names.find((item) => item.language.name === lang)?.name || result.name,
+      img: pokemonRes[idx].sprites.other['official-artwork'].front_default || pokemonRes[idx].sprites.front_default,
     })),
     next,
     previous,
@@ -75,6 +85,24 @@ export const useGetPokemonList = (lang: string = 'ko', offset: number = 0, limit
       const pokemonList = data.pages.flatMap((page) => page.results.map((result) => result));
 
       return { pokemonList };
+    },
+  });
+};
+
+export const useGetPokemonListOne = (pokemonId: number, lang: string = 'ko') => {
+  return useQuery({
+    queryKey: QUERY_KEY.POKEMON_LIST_ONE(pokemonId),
+    queryFn: () =>
+      getPokemonList({
+        lang,
+        offset: pokemonId - 1,
+        limit: 1,
+        pokemonListUrl: `${API_URL.BASE}${API_URL.POKEMON}?offset=${pokemonId - 1}&limit=1`,
+      }),
+    enabled: pokemonId > 0,
+    select(data) {
+      const pokemonListOne = data.results[0];
+      return pokemonListOne;
     },
   });
 };

@@ -21,6 +21,7 @@ module.exports = {
     'no-restricted-syntax': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/jsx-props-no-spreading': 'off',
+    'react/jsx-no-useless-fragment': 'off',
     'react/require-default-props': 'off',
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'react/function-component-definition': [2, { namedComponents: 'arrow-function' }],

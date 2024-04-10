@@ -1,4 +1,4 @@
-import { ListResult } from 'types';
+import { PokeDexList } from 'types';
 
 // Style
 import { PokeDexListItemImg, PokeDexListItemName, PokeDexListItemWrapper } from 'styles/pokeDexList';
@@ -7,11 +7,10 @@ import { PokeDexListItemImg, PokeDexListItemName, PokeDexListItemWrapper } from 
 import { PAGE_URL } from 'consts/common';
 
 // Util
-import { createPokemonImgPath } from 'utils/pokeDex/createPokemonImgPath';
 import { getPokemonNumFromUrl } from 'utils/pokeDex/getPokemonNumFromUrl';
 
 interface IPokemonCard {
-  pokemonInfo: ListResult['results'][number];
+  pokemonInfo: PokeDexList[number];
   listItemRef?: React.RefObject<HTMLAnchorElement>;
 }
 const PokeDexListItem = ({ pokemonInfo, listItemRef }: IPokemonCard) => {
@@ -19,7 +18,7 @@ const PokeDexListItem = ({ pokemonInfo, listItemRef }: IPokemonCard) => {
 
   return (
     <PokeDexListItemWrapper to={`${PAGE_URL.POKE_DEX}/${pokemonNum}`} ref={listItemRef}>
-      <PokeDexListItemImg src={createPokemonImgPath(pokemonNum)} alt={pokemonInfo.name} />
+      <PokeDexListItemImg src={pokemonInfo.img} alt={pokemonInfo.name} />
       <PokeDexListItemName>
         No.{pokemonNum}
         <br />
