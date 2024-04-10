@@ -1,4 +1,4 @@
-export type PokemonList = {
+export type ListResult = {
   count: number;
   next: string;
   previous: string;
@@ -8,12 +8,19 @@ export type PokemonList = {
   }>;
 };
 
+export type PokeDexList = Array<ListResult['results'][number] & { img: string }>;
+
 export type Pokemon = {
   id: number;
   name: string;
   weight: number;
   sprites: {
     front_default: string;
+    other: {
+      'official-artwork': {
+        front_default: string;
+      };
+    };
   };
   abilities: Array<{
     ability: { name: string; url: string };
@@ -33,6 +40,12 @@ export type Pokemon = {
 export type Species = {
   id: number;
   name: string;
+  names: Array<{
+    name: string;
+    language: {
+      name: string;
+    };
+  }>;
   evolution_chain: {
     url: string;
   };

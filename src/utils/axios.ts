@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { POKE_API_URL } from 'consts/common';
+import { API_URL } from 'consts/common';
 
 const DEFAULT_AXIOS_INSTANCE = axios.create({
-  baseURL: POKE_API_URL,
+  baseURL: API_URL.BASE,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded',
     Accept: 'application/json; charset=UTF-8',

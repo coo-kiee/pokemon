@@ -2,16 +2,15 @@ import { useRef, useState } from 'react';
 
 const useSearchPokemonNum = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const [searchPokemonId, setSearchPokemonId] = useState('');
 
-  const [searchPokemonNum, setSearchPokemonNum] = useState(0);
-
-  const handleSearchPokemonNum = () => {
+  const handleSearchPokemonId = () => {
     if (!searchInputRef.current) return;
 
-    setSearchPokemonNum(Number(searchInputRef.current.value));
+    setSearchPokemonId(searchInputRef.current.value);
   };
 
-  return { searchInputRef, searchPokemonNum, handleSearchPokemonNum };
+  return { searchInputRef, searchPokemonId, handleSearchPokemonId };
 };
 
 export default useSearchPokemonNum;

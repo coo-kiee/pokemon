@@ -1,7 +1,11 @@
 // 임시
 export const HOST_NAME = 'www.pokeapi.com';
 
-export const POKE_API_URL = 'https://pokeapi.co/api/v2/';
+export const API_URL = {
+  BASE: 'https://pokeapi.co/api/v2',
+  POKEMON: '/pokemon',
+  SPECIES: '/pokemon-species',
+};
 
 export const PAGE_URL = {
   HOEM: '/',

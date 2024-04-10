@@ -1,4 +1,5 @@
-import { useContext } from 'react';
+import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 // Style
 import * as S from 'styles/pokeDexList';
@@ -8,31 +9,35 @@ import { useGetPokemonList } from 'apis/poke-dex';
 
 // Hook
 import useSearchPokemonNum from 'hooks/useSearchPokemonNum';
-import useShowCnt from 'hooks/useShowCnt';
-import useFindPokemon from 'hooks/useSearchPokemon';
+import useIntersectionObserver from 'hooks/useIntersectionObserver';
 
 // Util
 import { checkInputNumber } from 'utils/checkInputNumber';
 
-// Context
-import TopBtn from 'components/TopBtn';
-import { Link } from 'react-router-dom';
+// URL
 import { PAGE_URL } from 'consts/common';
-import { ShowCntContext } from '../ShowCntProvider';
 
 // Component
+import TopBtn from 'components/TopBtn';
 import PokeDexListItem from './PokeDexListItem';
+import SearchResult from './SearchResult';
 
 const PokeDexList = () => {
-  const showCnt = useContext(ShowCntContext);
-
-  const { triggerIncreaseShowCntRef } = useShowCnt();
-  const { searchInputRef, searchPokemonNum, handleSearchPokemonNum } = useSearchPokemonNum();
+  const listItemRef = useRef<HTMLAnchorElement>(null);
 
   // Fetch
-  const { data: pokemonList } = useGetPokemonList();
+  const {
+    data: { pokemonList },
+    fetchNextPage,
+  } = useGetPokemonList('ko', 0, 20);
 
-  const { renderList } = useFindPokemon(pokemonList, searchPokemonNum);
+  // Next Fetch
+  useIntersectionObserver({
+    target: listItemRef,
+    callBack: fetchNextPage,
+  });
+
+  const { searchInputRef, searchPokemonId, handleSearchPokemonId } = useSearchPokemonNum();
 
   return (
     <S.PokeDexListContainer>
@@ -43,30 +48,32 @@ const PokeDexList = () => {
             <Link to={PAGE_URL.HOEM}>홈으로</Link>
           </button>
         </S.PokeDexListTopFuction>
-        <S.PokeDexListSearchBox onSubmit={handleSearchPokemonNum}>
+        <S.PokeDexListSearchBox onSubmit={handleSearchPokemonId}>
           <S.PokeDexListSearchInputLabel>포켓몬 검색</S.PokeDexListSearchInputLabel>
           <S.PokeDexListSearchInput
             ref={searchInputRef}
             type="text"
             placeholder="포켓몬 번호를 입력하세요"
+            defaultValue={searchPokemonId}
             onChange={checkInputNumber}
           />
-          <S.PokeDexListSearchButton type="button" onClick={handleSearchPokemonNum}>
+          <S.PokeDexListSearchButton type="button" onClick={handleSearchPokemonId}>
             검색
           </S.PokeDexListSearchButton>
         </S.PokeDexListSearchBox>
       </S.PokeDexListTopBox>
       <S.PokeDexListWrapper>
-        {renderList
-          ?.filter((_, index) => index < showCnt)
-          .map((item, index) => (
+        {searchPokemonId ? (
+          <SearchResult searchPokemonId={searchPokemonId} />
+        ) : (
+          pokemonList?.map((item, index, arr) => (
             <PokeDexListItem
               key={item.name}
               pokemonInfo={item}
-              triggerIncreaseShowCntRef={index + 1 === showCnt ? triggerIncreaseShowCntRef : undefined}
+              listItemRef={index + 1 === arr.length ? listItemRef : undefined}
             />
-          ))}
-        {!renderList && <S.PokeDexListNone>검색 결과가 없습니다.</S.PokeDexListNone>}
+          ))
+        )}
       </S.PokeDexListWrapper>
       <TopBtn />
     </S.PokeDexListContainer>

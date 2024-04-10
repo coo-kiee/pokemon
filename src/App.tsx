@@ -25,7 +25,8 @@ import Seo from 'components/seo';
 import ErrorFallback from 'components/error';
 
 const Home = lazy(() => import('pages/home'));
-const PokeDex = lazy(() => import('pages/poke-dex'));
+const PokeDex = lazy(() => import('pages/poke-dex/list'));
+const PokeDexDetail = lazy(() => import('pages/poke-dex/detail'));
 
 const App = () => {
   const { reset } = useQueryErrorResetBoundary();
@@ -61,7 +62,7 @@ const App = () => {
                   <Route element={<Layout />}>
                     <Route path={PAGE_URL.HOEM} element={<Home />} />
                     <Route path={PAGE_URL.POKE_DEX} element={<PokeDex />} />
-                    <Route path={`${PAGE_URL.POKE_DEX}/:id`} element={<PokeDex />} />
+                    <Route path={`${PAGE_URL.POKE_DEX}/:id`} element={<PokeDexDetail />} />
                   </Route>
                 </Routes>
               </Suspense>

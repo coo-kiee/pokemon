@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 // Style
 import * as S from 'styles/pokeDexDetail';
@@ -16,14 +16,16 @@ import { getPokemonNumFromUrl } from 'utils/pokeDex/getPokemonNumFromUrl';
 // Hook
 import useLang from 'hooks/useLang';
 
+import { isNaturalNumber } from 'utils/validation';
+
 // Component
 import PokeDexDetailDescription from './PokeDexDetailDescription';
 import PokeDexDetailEvolution from './PokeDexDetailEvolution';
 
-interface IPokeDexDetail {
-  pokemonId: number;
-}
-const PokeDexDetail = ({ pokemonId }: IPokeDexDetail) => {
+const PokeDexDetail = () => {
+  const { id = '' } = useParams();
+  const pokemonId = isNaturalNumber(id) ? Number(id) : 0;
+
   const { convertLang, convertLangs } = useLang();
 
   // Fetch
