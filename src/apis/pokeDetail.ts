@@ -1,4 +1,4 @@
-import Axios from 'utils/axios';
+import Axios from 'apis/axios';
 
 import { API_URL } from 'consts/common';
 

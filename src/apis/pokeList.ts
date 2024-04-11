@@ -1,14 +1,14 @@
-import { useQuery, useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 
 // Util
-import Axios from 'utils/axios';
+import Axios from 'apis/axios';
 import { convertLang } from 'utils/convertLang';
 
 // Const
 import { API_URL } from 'consts/common';
 
 // Type
-import { EvolutionChain, Pokemon, ListResult, Species } from 'types';
+import { ListResult } from 'types';
 
 // API
 import { getPokemon, getSpecies } from './pokeDetail';
@@ -16,9 +16,6 @@ import { getPokemon, getSpecies } from './pokeDetail';
 const QUERY_KEY = {
   POKEMON_LIST: (lang: string, offset: number, limit: number) => ['pokemonList', lang, offset, limit],
   POKEMON_LIST_ONE: (pokemonId: number) => ['pokemonList', pokemonId],
-  POKEMON: (pokemonId: number) => ['pokemon', pokemonId],
-  SPECIES: (pokemonId: number) => ['species', pokemonId],
-  EVOLUTION_CHAIN: (evolutionNum: number) => ['evolutionChain', evolutionNum],
 };
 
 interface IGetPokemonList {
@@ -39,8 +36,9 @@ const getPokemonList = async ({ lang, pokemonListUrl, offset, limit }: IGetPokem
   return {
     results: results.map((result, idx) => ({
       ...result,
-      name: convertLang(speciesRes[idx], lang),
+      id: pokemonRes[idx].id,
       img: pokemonRes[idx].sprites.other['official-artwork'].front_default || pokemonRes[idx].sprites.front_default,
+      name: convertLang(speciesRes[idx], lang),
     })),
     next,
     previous,
@@ -100,26 +98,5 @@ export const useGetPokemonListOne = (pokemonId: number, lang: string) => {
       const pokemonListOne = data.results[0];
       return pokemonListOne;
     },
-  });
-};
-
-export const useGetPokemon = (pokemonId: number) => {
-  return useSuspenseQuery({
-    queryKey: QUERY_KEY.POKEMON(pokemonId),
-    queryFn: () => Axios.get<Pokemon>(`pokemon/${pokemonId}`),
-  });
-};
-
-export const useGetSpecies = (pokemonNum: number) => {
-  return useSuspenseQuery({
-    queryKey: QUERY_KEY.SPECIES(pokemonNum),
-    queryFn: () => Axios.get<Species>(`pokemon-species/${pokemonNum}`),
-  });
-};
-
-export const useGetEvolutionChain = (evolutionNum: number) => {
-  return useSuspenseQuery({
-    queryKey: QUERY_KEY.EVOLUTION_CHAIN(evolutionNum),
-    queryFn: () => Axios.get<EvolutionChain>(`evolution-chain/${evolutionNum}`),
   });
 };

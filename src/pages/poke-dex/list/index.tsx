@@ -69,7 +69,7 @@ const PokeDexList = () => {
           pokemonList?.map((item, index, arr) => (
             <PokeDexListItem
               key={item.name}
-              pokemonInfo={item}
+              pokemon={item}
               listItemRef={index + 1 === arr.length ? listItemRef : undefined}
             />
           ))

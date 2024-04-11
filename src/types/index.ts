@@ -15,7 +15,7 @@ export type ListResult = {
   }>;
 };
 
-export type PokeDexList = Array<ListResult['results'][number] & { img: string }>;
+export type PokeDexList = Array<ListResult['results'][number] & { img: string; id: number }>;
 
 export type Pokemon = {
   id: number;
