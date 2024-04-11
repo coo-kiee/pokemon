@@ -2,7 +2,7 @@
 import * as S from 'styles/pokeDexList';
 
 // API
-import { useGetPokemonListOne } from 'apis/poke-dex';
+import { useGetPokemonListOne } from 'apis/pokeList';
 
 // Component
 import Spinner from 'components/Spinner';
@@ -24,7 +24,7 @@ const SearchResult = ({ searchPokemonId }: ISearchResult) => {
   }
 
   return pokemonListOne ? (
-    <PokeDexListItem pokemonInfo={pokemonListOne} />
+    <PokeDexListItem pokemon={pokemonListOne} />
   ) : (
     <S.PokeDexListNone>검색 결과가 없습니다.</S.PokeDexListNone>
   );

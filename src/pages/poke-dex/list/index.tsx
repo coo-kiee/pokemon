@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import * as S from 'styles/pokeDexList';
 
 // API
-import { useGetPokemonList } from 'apis/poke-dex';
+import { useGetPokemonList } from 'apis/pokeList';
 
 // Hook
 import useSearchPokemonNum from 'hooks/useSearchPokemonNum';
@@ -29,7 +29,7 @@ const PokeDexList = () => {
   const {
     data: { pokemonList },
     fetchNextPage,
-  } = useGetPokemonList('ko', 0, 20);
+  } = useGetPokemonList(0, 20, 'ko');
 
   // Next Fetch
   useIntersectionObserver({
@@ -69,7 +69,7 @@ const PokeDexList = () => {
           pokemonList?.map((item, index, arr) => (
             <PokeDexListItem
               key={item.name}
-              pokemonInfo={item}
+              pokemon={item}
               listItemRef={index + 1 === arr.length ? listItemRef : undefined}
             />
           ))

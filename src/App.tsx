@@ -11,10 +11,6 @@ import { PAGE_URL } from 'consts/common';
 import theme from 'styles/theme';
 import GlobalStyle from 'styles/GlobalStyle';
 
-// Hook
-import useCreateAllLang from 'hooks/useCreateAllLang';
-import useSettingLang from 'hooks/useSettingLang';
-
 // Provider
 import MetaProvider from 'components/seo/MetaProvider';
 
@@ -44,10 +40,6 @@ const App = () => {
       },
     },
   });
-
-  useCreateAllLang();
-
-  useSettingLang();
 
   return (
     <MetaProvider>
