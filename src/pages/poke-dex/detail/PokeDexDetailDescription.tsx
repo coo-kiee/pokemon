@@ -4,7 +4,7 @@ import * as S from 'styles/pokeDexDetail';
 
 interface IPokeDexDetailDescription {
   title: string;
-  text?: string;
+  text?: string | number;
   render?: () => ReactNode;
 }
 const PokeDexDetailDescription = ({ title, text, render }: IPokeDexDetailDescription) => {

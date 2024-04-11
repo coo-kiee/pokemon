@@ -33,7 +33,7 @@ const getPokemonDetail = async (pokemonId: number, lang: string) => {
   ]);
 
   const extractEvolutionUrls = (evolutionChain: EvolutionChain['chain'], arr: Promise<Species>[] = []) => {
-    arr.push(getDetailFromUrl<Species>(evolutionChain.species.url));
+    if (arr.length || evolutionChain.evolves_to.length) arr.push(getDetailFromUrl<Species>(evolutionChain.species.url));
     if (evolutionChain.evolves_to.length) extractEvolutionUrls(evolutionChain.evolves_to[0], arr);
 
     return arr;
@@ -45,17 +45,22 @@ const getPokemonDetail = async (pokemonId: number, lang: string) => {
   const abilities = abilityRes.map((ability) => convertLang(ability, lang));
   const types = typeRes.map((type) => convertLang(type, lang));
   const stats = statRes.map((stat, idx) => `${convertLang(stat, lang)}: ${pokemon.stats[idx].base_stat}`);
-  const evolutions =
-    evolutionPokemonRes.length > 1
-      ? evolutionPokemonRes.map((evolutionPokemon) => convertLang(evolutionPokemon, lang))
-      : [];
+  const evolutions = evolutionPokemonRes.length
+    ? evolutionPokemonRes.map((evolutionPokemon) => ({
+        id: evolutionPokemon.id,
+        name: convertLang(evolutionPokemon, lang),
+      }))
+    : [];
 
   return {
+    id: pokemon.id,
+    img: pokemon.sprites.other['official-artwork'].front_default,
     name,
     abilities,
     types,
     stats,
     evolutions,
+    weight: pokemon.weight,
   };
 };
 
