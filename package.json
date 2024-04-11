@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "json": "npx json-server@0.17.4 --watch ./src/lang/ko.json --port 3001",
-    "dev": "concurrently \"vite\" \"yarn json\" ",
+    "dev": "vite",
+    "dev-json": "concurrently \"vite\" \"yarn json\" ",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"

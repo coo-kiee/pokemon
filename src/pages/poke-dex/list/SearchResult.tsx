@@ -2,7 +2,7 @@
 import * as S from 'styles/pokeDexList';
 
 // API
-import { useGetPokemonListOne } from 'apis/poke-dex';
+import { useGetPokemonListOne } from 'apis/pokeList';
 
 // Component
 import Spinner from 'components/Spinner';

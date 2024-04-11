@@ -7,7 +7,8 @@ import * as S from 'styles/pokeDexDetail';
 import { PAGE_URL } from 'consts/common';
 
 // API
-import { useGetPokemon, useGetSpecies } from 'apis/poke-dex';
+import { useGetPokemon, useGetSpecies } from 'apis/pokeList';
+import { useGetPokemonDetail } from 'apis/pokeDetail';
 
 // Util
 import { extractPokemonInfo, extractPokemonStat } from 'utils/pokeDex/extractPokemonInfo';
@@ -29,6 +30,8 @@ const PokeDexDetail = () => {
   const { convertLang, convertLangs } = useLang();
 
   // Fetch
+  const { data: pokemonDetail } = useGetPokemonDetail(pokemonId, 'ko');
+  console.log(pokemonDetail);
   const { data: pokemon } = useGetPokemon(pokemonId);
   const { data: species } = useGetSpecies(pokemonId);
   const evolutionNum = getPokemonNumFromUrl(species.evolution_chain.url);

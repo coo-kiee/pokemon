@@ -1,3 +1,10 @@
+export type Names = Array<{
+  name: string;
+  language: {
+    name: string;
+  };
+}>;
+
 export type ListResult = {
   count: number;
   next: string;
@@ -40,12 +47,7 @@ export type Pokemon = {
 export type Species = {
   id: number;
   name: string;
-  names: Array<{
-    name: string;
-    language: {
-      name: string;
-    };
-  }>;
+  names: Names;
   evolution_chain: {
     url: string;
   };
@@ -73,3 +75,9 @@ export type EvolutionChain = {
   baby_trigger_item: string;
   chain: Chain;
 };
+
+export type Ability = { name: string; names: Names };
+
+export type Type = { name: string; names: Names };
+
+export type Stat = { name: string; names: Names };
