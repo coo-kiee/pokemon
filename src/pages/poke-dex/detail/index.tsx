@@ -7,7 +7,7 @@ import * as S from 'styles/pokeDexDetail';
 import { PAGE_URL } from 'consts/common';
 
 // API
-import { useGetPokemonDetail } from 'apis/pokeDetail';
+import { useGetPokemonDetail } from 'apis/pokeDex';
 
 // Util
 

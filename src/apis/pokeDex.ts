@@ -1,0 +1,158 @@
+import { useQuery, useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+
+// Util
+import Axios from 'apis/axios';
+import { convertLang } from 'utils/convertLang';
+
+// Const
+import { API_URL } from 'consts/common';
+
+// Type
+import { Ability, EvolutionChain, ListResult, Pokemon, Species, Stat, Type } from 'types';
+
+const QUERY_KEY = {
+  POKEMON_LIST: (lang: string, offset: number, limit: number) => ['pokemonList', lang, offset, limit],
+  POKEMON_LIST_ONE: (pokemonId: number) => ['pokemonList', pokemonId],
+  DETAIL: (pokemonId: number, lang: string) => ['pokemonDetail', pokemonId, lang],
+};
+
+interface IGetPokemonList {
+  lang: string;
+  pokemonListUrl: string;
+  offset: number;
+  limit: number;
+}
+
+const getFromUrl = async <T>(url: string) => {
+  return Axios.get(url, { baseURL: '' }) as Promise<T>;
+};
+
+const getPokemon = async (pokemonId: number) => {
+  return Axios.get<Pokemon>(`${API_URL.POKEMON}/${pokemonId}`);
+};
+
+const getSpecies = async (pokemonId: number) => {
+  return Axios.get<Species>(`${API_URL.SPECIES}/${pokemonId}`);
+};
+
+const getPokemonList = async ({ lang, pokemonListUrl, offset, limit }: IGetPokemonList) => {
+  const pokemonIndices = Array.from({ length: limit }, (_, idx) => offset + idx + 1);
+
+  const [{ results, next, previous }, pokemonResults, speciesResults] = await Promise.all([
+    Axios.get<ListResult>(pokemonListUrl, { baseURL: '' }),
+    Promise.all(pokemonIndices.map((index) => getPokemon(index))),
+    Promise.all(pokemonIndices.map((index) => getSpecies(index))),
+  ]);
+
+  return {
+    results: results.map((result, idx) => ({
+      ...result,
+      id: pokemonResults[idx].id,
+      img:
+        pokemonResults[idx].sprites.other['official-artwork'].front_default ||
+        pokemonResults[idx].sprites.front_default,
+      name: convertLang(speciesResults[idx], lang),
+    })),
+    next,
+    previous,
+  };
+};
+
+export const useGetPokemonList = (offset: number, limit: number, lang: string) => {
+  return useSuspenseInfiniteQuery({
+    queryKey: QUERY_KEY.POKEMON_LIST(lang, offset, limit),
+    queryFn: ({ pageParam }) => getPokemonList(pageParam),
+    initialPageParam: {
+      lang,
+      pokemonListUrl: `${API_URL.BASE}${API_URL.POKEMON}?offset=${offset}&limit=${limit}`,
+      offset,
+      limit,
+    },
+    getNextPageParam: (data, _, lastPageParam) => {
+      if (!data.next) return undefined;
+
+      return {
+        lang: lastPageParam.lang,
+        limit: lastPageParam.limit,
+        offset: lastPageParam.offset + lastPageParam.limit,
+        pokemonListUrl: data.next,
+      };
+    },
+    getPreviousPageParam: (data, _, firstPageParam) => {
+      if (!data.previous) return undefined;
+
+      return {
+        lang: firstPageParam.lang,
+        limit: firstPageParam.limit,
+        offset: firstPageParam.offset - firstPageParam.limit,
+        pokemonListUrl: data.previous,
+      };
+    },
+    select(data) {
+      const pokemonList = data.pages.flatMap((page) => page.results.map((result) => result));
+
+      return { pokemonList };
+    },
+  });
+};
+
+export const useGetPokemonListOne = (pokemonId: number, lang: string) => {
+  return useQuery({
+    queryKey: QUERY_KEY.POKEMON_LIST_ONE(pokemonId),
+    queryFn: () =>
+      getPokemonList({
+        lang,
+        offset: pokemonId - 1,
+        limit: 1,
+        pokemonListUrl: `${API_URL.BASE}${API_URL.POKEMON}?offset=${pokemonId - 1}&limit=1`,
+      }),
+    enabled: pokemonId > 0,
+    select(data) {
+      const pokemonListOne = data.results[0];
+      return pokemonListOne;
+    },
+  });
+};
+
+const getPokemonDetail = async (pokemonId: number, lang: string) => {
+  const [pokemon, species] = await Promise.all([getPokemon(pokemonId), getSpecies(pokemonId)]);
+
+  const [evolution, abilityRes, typeRes, statRes] = await Promise.all([
+    getFromUrl<EvolutionChain>(species.evolution_chain.url),
+    Promise.all(pokemon.abilities.map((item) => getFromUrl<Ability>(item.ability.url))),
+    Promise.all(pokemon.types.map((item) => getFromUrl<Type>(item.type.url))),
+    Promise.all(pokemon.stats.map((item) => getFromUrl<Stat>(item.stat.url))),
+  ]);
+
+  const extractEvolutionUrls = (evolutionChain: EvolutionChain['chain'], arr: Promise<Species>[] = []) => {
+    if (arr.length || evolutionChain.evolves_to.length) arr.push(getFromUrl<Species>(evolutionChain.species.url));
+    if (evolutionChain.evolves_to.length) extractEvolutionUrls(evolutionChain.evolves_to[0], arr);
+
+    return arr;
+  };
+
+  const [evolutionPokemonRes] = await Promise.all([Promise.all(extractEvolutionUrls(evolution.chain))]);
+
+  return {
+    id: pokemon.id,
+    weight: pokemon.weight,
+    img: pokemon.sprites.other['official-artwork'].front_default,
+    name: convertLang(species, lang),
+    abilities: abilityRes.map((ability) => convertLang(ability, lang)),
+    types: typeRes.map((type) => convertLang(type, lang)),
+    stats: statRes.map((stat, idx) => `${convertLang(stat, lang)}: ${pokemon.stats[idx].base_stat}`),
+    evolutions: evolutionPokemonRes.length
+      ? evolutionPokemonRes.map((evolutionPokemon) => ({
+          id: evolutionPokemon.id,
+          name: convertLang(evolutionPokemon, lang),
+        }))
+      : [],
+  };
+};
+
+export const useGetPokemonDetail = (pokemonId: number, lang: string) => {
+  return useSuspenseQuery({
+    queryKey: QUERY_KEY.DETAIL(pokemonId, lang),
+    queryFn: () => getPokemonDetail(pokemonId, lang),
+  });
+};

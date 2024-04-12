@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import * as S from 'styles/pokeDexList';
 
 // API
-import { useGetPokemonList } from 'apis/pokeList';
+import { useGetPokemonList } from 'apis/pokeDex';
 
 // Hook
 import useSearchPokemonNum from 'hooks/useSearchPokemonNum';
@@ -23,7 +23,7 @@ import PokeDexListItem from './PokeDexListItem';
 import SearchResult from './SearchResult';
 
 const PokeDexList = () => {
-  const listItemRef = useRef<HTMLAnchorElement>(null);
+  const fetchTriggerRef = useRef<HTMLAnchorElement>(null);
 
   // Fetch
   const {
@@ -33,7 +33,7 @@ const PokeDexList = () => {
 
   // Next Fetch
   useIntersectionObserver({
-    target: listItemRef,
+    target: fetchTriggerRef,
     callBack: fetchNextPage,
   });
 
@@ -70,7 +70,7 @@ const PokeDexList = () => {
             <PokeDexListItem
               key={item.name}
               pokemon={item}
-              listItemRef={index + 1 === arr.length ? listItemRef : undefined}
+              fetchTriggerRef={index + 1 === arr.length - 10 ? fetchTriggerRef : undefined}
             />
           ))
         )}
