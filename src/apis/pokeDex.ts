@@ -11,6 +11,7 @@ import { API_URL } from 'consts/common';
 import { Ability, EvolutionChain, ListResult, Pokemon, Species, Stat, Type } from 'types';
 
 const QUERY_KEY = {
+  Filter: () => ['filter'],
   POKEMON_LIST: (lang: string, offset: number, limit: number) => ['pokemonList', lang, offset, limit],
   POKEMON_LIST_ONE: (pokemonId: number) => ['pokemonList', pokemonId],
   DETAIL: (pokemonId: number, lang: string) => ['pokemonDetail', pokemonId, lang],
@@ -23,16 +24,36 @@ interface IGetPokemonList {
   limit: number;
 }
 
-const getFromUrl = async <T>(url: string) => {
-  return Axios.get(url, { baseURL: '' }) as Promise<T>;
+const getFromUrl = async <T>(url: string) => Axios.get(url, { baseURL: '' }) as Promise<T>;
+const getPokemon = async (pokemonId: number) => Axios.get<Pokemon>(`${API_URL.POKEMON}/${pokemonId}`);
+const getSpecies = async (pokemonId: number) => Axios.get<Species>(`${API_URL.SPECIES}/${pokemonId}`);
+
+const getFilters = async (lang: string) => {
+  const [{ count: typeCnt }, { count: abilityCnt }] = await Promise.all([
+    Axios.get<ListResult>(`${API_URL.BASE}${API_URL.TYPE}?offset=0&limit=1`),
+    Axios.get<ListResult>(`${API_URL.BASE}${API_URL.ABILITY}?offset=0&limit=1`),
+  ]);
+
+  const [{ results: typeRes }, { results: abilityRes }] = await Promise.all([
+    Axios.get<ListResult>(`${API_URL.BASE}${API_URL.TYPE}?offset=0&limit=${typeCnt}`),
+    Axios.get<ListResult>(`${API_URL.BASE}${API_URL.ABILITY}?offset=0&limit=${abilityCnt}`),
+  ]);
+
+  return {
+    type: (await Promise.all(typeRes.map((result) => getFromUrl<Type>(result.url)))).map((type) => ({
+      [convertLang(type, lang)]: false,
+    })),
+    ability: (await Promise.all(abilityRes.map((result) => getFromUrl<Ability>(result.url)))).map((ability) => ({
+      [convertLang(ability, lang)]: false,
+    })),
+  };
 };
 
-const getPokemon = async (pokemonId: number) => {
-  return Axios.get<Pokemon>(`${API_URL.POKEMON}/${pokemonId}`);
-};
-
-const getSpecies = async (pokemonId: number) => {
-  return Axios.get<Species>(`${API_URL.SPECIES}/${pokemonId}`);
+export const useGetFilters = (lang: string) => {
+  return useSuspenseQuery({
+    queryKey: QUERY_KEY.Filter(),
+    queryFn: () => getFilters(lang),
+  });
 };
 
 const getPokemonList = async ({ lang, pokemonListUrl, offset, limit }: IGetPokemonList) => {
@@ -44,6 +65,21 @@ const getPokemonList = async ({ lang, pokemonListUrl, offset, limit }: IGetPokem
     Promise.all(pokemonIndices.map((index) => getSpecies(index))),
   ]);
 
+  const [nestedAbilityReqs, nestedTypeReqs] = pokemonResults.reduce(
+    (arr, pokemonResult) => {
+      arr[0].push(pokemonResult.abilities.map((item) => getFromUrl<Ability>(item.ability.url)));
+      arr[1].push(pokemonResult.types.map((item) => getFromUrl<Type>(item.type.url)));
+
+      return arr;
+    },
+    [[] as Promise<Ability>[][], [] as Promise<Type>[][]],
+  );
+
+  const [nestedAbilityResults, nestedTypeResults] = await Promise.all([
+    Promise.all(nestedAbilityReqs.map((abilityReqs) => Promise.all(abilityReqs))),
+    Promise.all(nestedTypeReqs.map((typeReqs) => Promise.all(typeReqs))),
+  ]);
+
   return {
     results: results.map((result, idx) => ({
       ...result,
@@ -52,6 +88,8 @@ const getPokemonList = async ({ lang, pokemonListUrl, offset, limit }: IGetPokem
         pokemonResults[idx].sprites.other['official-artwork'].front_default ||
         pokemonResults[idx].sprites.front_default,
       name: convertLang(speciesResults[idx], lang),
+      abilities: nestedAbilityResults[idx].map((abilityResult) => convertLang(abilityResult, lang)),
+      types: nestedTypeResults[idx].map((typeResult) => convertLang(typeResult, lang)),
     })),
     next,
     previous,
@@ -135,6 +173,7 @@ const getPokemonDetail = async (pokemonId: number, lang: string) => {
 
   return {
     id: pokemon.id,
+    url: `${API_URL.BASE}${API_URL.POKEMON}/${pokemonId}`,
     weight: pokemon.weight,
     img: pokemon.sprites.other['official-artwork'].front_default,
     name: convertLang(species, lang),
