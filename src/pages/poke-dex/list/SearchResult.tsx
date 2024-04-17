@@ -2,26 +2,17 @@
 import * as S from 'styles/pokeDexList';
 
 // API
-import { useGetPokemonListOne } from 'apis/pokeDex';
+import { useGetPokemonDetail } from 'apis/pokeDex';
 
 // Component
-import Spinner from 'components/Spinner';
 import PokeDexListItem from './PokeDexListItem';
 
 interface ISearchResult {
-  searchPokemonId: string;
+  searchText: string;
 }
-const SearchResult = ({ searchPokemonId }: ISearchResult) => {
+const SearchResult = ({ searchText }: ISearchResult) => {
   // Fetch
-  const { data: pokemonListOne, isFetching: isListOneFetching } = useGetPokemonListOne(Number(searchPokemonId), 'ko');
-
-  if (isListOneFetching) {
-    return (
-      <S.PokeDexListNone>
-        <Spinner />
-      </S.PokeDexListNone>
-    );
-  }
+  const { data: pokemonListOne } = useGetPokemonDetail(searchText, 'ko');
 
   return pokemonListOne ? (
     <PokeDexListItem pokemon={pokemonListOne} />

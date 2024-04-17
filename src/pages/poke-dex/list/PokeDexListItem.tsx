@@ -1,16 +1,17 @@
-import { PokeDexList } from 'types';
-
 // Style
 import { PokeDexListItemImg, PokeDexListItemName, PokeDexListItemWrapper } from 'styles/pokeDexList';
 
 // URL
 import { PAGE_URL } from 'consts/common';
 
-interface IPokemonCard {
-  pokemon: PokeDexList[number];
+interface IPokeDexListItem<T> {
+  pokemon: T;
   fetchTriggerRef?: React.RefObject<HTMLAnchorElement>;
 }
-const PokeDexListItem = ({ pokemon, fetchTriggerRef }: IPokemonCard) => {
+const PokeDexListItem = <T extends { name: string; url: string; img: string; id: number }>({
+  pokemon,
+  fetchTriggerRef,
+}: IPokeDexListItem<T>) => {
   return (
     <PokeDexListItemWrapper to={`${PAGE_URL.POKE_DEX}/${pokemon.id}`} ref={fetchTriggerRef}>
       <PokeDexListItemImg src={pokemon.img} alt={pokemon.name} />

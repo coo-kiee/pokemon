@@ -1,4 +1,4 @@
-import { useQuery, useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 // Util
 import Axios from 'apis/axios';
@@ -13,8 +13,7 @@ import { Ability, EvolutionChain, ListResult, Pokemon, Species, Stat, Type } fro
 const QUERY_KEY = {
   Filter: () => ['filter'],
   POKEMON_LIST: (lang: string, offset: number, limit: number) => ['pokemonList', lang, offset, limit],
-  POKEMON_LIST_ONE: (pokemonId: number) => ['pokemonList', pokemonId],
-  DETAIL: (pokemonId: number, lang: string) => ['pokemonDetail', pokemonId, lang],
+  DETAIL: (search: string, lang: string) => ['pokemonDetail', search, lang],
 };
 
 interface IGetPokemonList {
@@ -25,8 +24,8 @@ interface IGetPokemonList {
 }
 
 const getFromUrl = async <T>(url: string) => Axios.get(url, { baseURL: '' }) as Promise<T>;
-const getPokemon = async (pokemonId: number) => Axios.get<Pokemon>(`${API_URL.POKEMON}/${pokemonId}`);
-const getSpecies = async (pokemonId: number) => Axios.get<Species>(`${API_URL.SPECIES}/${pokemonId}`);
+const getPokemon = async (search: string) => Axios.get<Pokemon>(`${API_URL.POKEMON}/${search}`);
+const getSpecies = async (search: string) => Axios.get<Species>(`${API_URL.SPECIES}/${search}`);
 
 const getFilters = async (lang: string) => {
   const [{ count: typeCnt }, { count: abilityCnt }] = await Promise.all([
@@ -61,8 +60,8 @@ const getPokemonList = async ({ lang, pokemonListUrl, offset, limit }: IGetPokem
 
   const [{ results, next, previous }, pokemonResults, speciesResults] = await Promise.all([
     Axios.get<ListResult>(pokemonListUrl, { baseURL: '' }),
-    Promise.all(pokemonIndices.map((index) => getPokemon(index))),
-    Promise.all(pokemonIndices.map((index) => getSpecies(index))),
+    Promise.all(pokemonIndices.map((index) => getPokemon(String(index)))),
+    Promise.all(pokemonIndices.map((index) => getSpecies(String(index)))),
   ]);
 
   const [nestedAbilityReqs, nestedTypeReqs] = pokemonResults.reduce(
@@ -134,26 +133,8 @@ export const useGetPokemonList = (offset: number, limit: number, lang: string) =
   });
 };
 
-export const useGetPokemonListOne = (pokemonId: number, lang: string) => {
-  return useQuery({
-    queryKey: QUERY_KEY.POKEMON_LIST_ONE(pokemonId),
-    queryFn: () =>
-      getPokemonList({
-        lang,
-        offset: pokemonId - 1,
-        limit: 1,
-        pokemonListUrl: `${API_URL.BASE}${API_URL.POKEMON}?offset=${pokemonId - 1}&limit=1`,
-      }),
-    enabled: pokemonId > 0,
-    select(data) {
-      const pokemonListOne = data.results[0];
-      return pokemonListOne;
-    },
-  });
-};
-
-const getPokemonDetail = async (pokemonId: number, lang: string) => {
-  const [pokemon, species] = await Promise.all([getPokemon(pokemonId), getSpecies(pokemonId)]);
+const getPokemonDetail = async (search: string, lang: string) => {
+  const [pokemon, species] = await Promise.all([getPokemon(search), getSpecies(search)]);
 
   const [evolution, abilityRes, typeRes, statRes] = await Promise.all([
     getFromUrl<EvolutionChain>(species.evolution_chain.url),
@@ -173,7 +154,7 @@ const getPokemonDetail = async (pokemonId: number, lang: string) => {
 
   return {
     id: pokemon.id,
-    url: `${API_URL.BASE}${API_URL.POKEMON}/${pokemonId}`,
+    url: `${API_URL.BASE}${API_URL.POKEMON}/${search}`,
     weight: pokemon.weight,
     img: pokemon.sprites.other['official-artwork'].front_default,
     name: convertLang(species, lang),
@@ -189,9 +170,9 @@ const getPokemonDetail = async (pokemonId: number, lang: string) => {
   };
 };
 
-export const useGetPokemonDetail = (pokemonId: number, lang: string) => {
+export const useGetPokemonDetail = (search: string, lang: string) => {
   return useSuspenseQuery({
-    queryKey: QUERY_KEY.DETAIL(pokemonId, lang),
-    queryFn: () => getPokemonDetail(pokemonId, lang),
+    queryKey: QUERY_KEY.DETAIL(search, lang),
+    queryFn: () => getPokemonDetail(search, lang),
   });
 };

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { Suspense, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 // Style
@@ -19,6 +19,7 @@ import { PAGE_URL } from 'consts/common';
 
 // Component
 import TopBtn from 'components/TopBtn';
+import Spinner from 'components/Spinner';
 import PokeDexListItem from './PokeDexListItem';
 import SearchResult from './SearchResult';
 
@@ -64,9 +65,17 @@ const PokeDexList = () => {
       </S.PokeDexListTopBox>
       <S.PokeDexListWrapper>
         {searchPokemonId ? (
-          <SearchResult searchPokemonId={searchPokemonId} />
+          <Suspense
+            fallback={
+              <S.PokeDexListNone>
+                <Spinner />
+              </S.PokeDexListNone>
+            }
+          >
+            <SearchResult searchText={searchPokemonId} />
+          </Suspense>
         ) : (
-          pokemonList?.map((item, index, arr) => (
+          pokemonList.map((item, index, arr) => (
             <PokeDexListItem
               key={item.name}
               pokemon={item}
