@@ -1,11 +1,12 @@
-import { useRef } from 'react';
+import { Suspense, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 
 // Style
 import * as S from 'styles/pokeDexList';
 
 // API
-import { useGetPokemonList } from 'apis/pokeList';
+import { useGetPokemonList } from 'apis/pokeDex';
 
 // Hook
 import useSearchPokemonNum from 'hooks/useSearchPokemonNum';
@@ -19,11 +20,13 @@ import { PAGE_URL } from 'consts/common';
 
 // Component
 import TopBtn from 'components/TopBtn';
+import Spinner from 'components/Spinner';
+import ErrorFallback from 'components/error';
 import PokeDexListItem from './PokeDexListItem';
 import SearchResult from './SearchResult';
 
 const PokeDexList = () => {
-  const listItemRef = useRef<HTMLAnchorElement>(null);
+  const fetchTriggerRef = useRef<HTMLAnchorElement>(null);
 
   // Fetch
   const {
@@ -33,7 +36,7 @@ const PokeDexList = () => {
 
   // Next Fetch
   useIntersectionObserver({
-    target: listItemRef,
+    target: fetchTriggerRef,
     callBack: fetchNextPage,
   });
 
@@ -64,13 +67,26 @@ const PokeDexList = () => {
       </S.PokeDexListTopBox>
       <S.PokeDexListWrapper>
         {searchPokemonId ? (
-          <SearchResult searchPokemonId={searchPokemonId} />
+          <ErrorBoundary
+            key={searchPokemonId}
+            fallbackRender={(props) => <ErrorFallback {...props} shouldReset={false} />}
+          >
+            <Suspense
+              fallback={
+                <S.PokeDexListNone>
+                  <Spinner />
+                </S.PokeDexListNone>
+              }
+            >
+              <SearchResult searchText={searchPokemonId} />
+            </Suspense>
+          </ErrorBoundary>
         ) : (
-          pokemonList?.map((item, index, arr) => (
+          pokemonList.map((item, index, arr) => (
             <PokeDexListItem
               key={item.name}
               pokemon={item}
-              listItemRef={index + 1 === arr.length ? listItemRef : undefined}
+              fetchTriggerRef={index + 1 === arr.length - 10 ? fetchTriggerRef : undefined}
             />
           ))
         )}

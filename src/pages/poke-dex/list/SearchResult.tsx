@@ -1,33 +1,17 @@
-// Style
-import * as S from 'styles/pokeDexList';
-
 // API
-import { useGetPokemonListOne } from 'apis/pokeList';
+import { useGetPokemonDetail } from 'apis/pokeDex';
 
 // Component
-import Spinner from 'components/Spinner';
 import PokeDexListItem from './PokeDexListItem';
 
 interface ISearchResult {
-  searchPokemonId: string;
+  searchText: string;
 }
-const SearchResult = ({ searchPokemonId }: ISearchResult) => {
+const SearchResult = ({ searchText }: ISearchResult) => {
   // Fetch
-  const { data: pokemonListOne, isFetching: isListOneFetching } = useGetPokemonListOne(Number(searchPokemonId), 'ko');
+  const { data: pokemon } = useGetPokemonDetail(searchText, 'ko');
 
-  if (isListOneFetching) {
-    return (
-      <S.PokeDexListNone>
-        <Spinner />
-      </S.PokeDexListNone>
-    );
-  }
-
-  return pokemonListOne ? (
-    <PokeDexListItem pokemon={pokemonListOne} />
-  ) : (
-    <S.PokeDexListNone>검색 결과가 없습니다.</S.PokeDexListNone>
-  );
+  return <PokeDexListItem pokemon={pokemon} />;
 };
 
 export default SearchResult;

@@ -7,41 +7,34 @@ import * as S from 'styles/pokeDexDetail';
 import { PAGE_URL } from 'consts/common';
 
 // API
-import { useGetPokemonDetail } from 'apis/pokeDetail';
-
-// Util
-
-import { isNaturalNumber } from 'utils/validation';
+import { useGetPokemonDetail } from 'apis/pokeDex';
 
 // Component
 import PokeDexDetailDescription from './PokeDexDetailDescription';
 
 const PokeDexDetail = () => {
-  const { id = '' } = useParams();
-  const pokemonId = isNaturalNumber(id) ? Number(id) : 0;
+  const { search = '' } = useParams();
 
   // Fetch
-  const {
-    data: { img, name, abilities, types, weight, stats, evolutions },
-  } = useGetPokemonDetail(pokemonId, 'ko');
+  const { data: detail } = useGetPokemonDetail(search, 'ko');
 
   return (
     <S.PokeDexDetailContainer>
-      <S.PokeDexDetailImg src={img} alt={name} />
-      <PokeDexDetailDescription title="No" text={pokemonId} />
-      <PokeDexDetailDescription title="Name" text={name} />
-      <PokeDexDetailDescription title="Ability" text={abilities.join(', ')} />
-      <PokeDexDetailDescription title="Type" text={types.join(', ')} />
-      <PokeDexDetailDescription title="Weight" text={weight} />
+      <S.PokeDexDetailImg src={detail.img} alt={detail.name} />
+      <PokeDexDetailDescription title="No" text={detail.id} />
+      <PokeDexDetailDescription title="Name" text={detail.name} />
+      <PokeDexDetailDescription title="Ability" text={detail.abilities.join(', ')} />
+      <PokeDexDetailDescription title="Type" text={detail.types.join(', ')} />
+      <PokeDexDetailDescription title="Weight" text={detail.weight} />
       <PokeDexDetailDescription
         title="Evolution"
         render={() => (
           <S.PokeDexDetailEvolutionBox>
-            {Object.values(evolutions).map((evolution, idx, arr) => (
+            {Object.values(detail.evolutions).map((evolution, idx, arr) => (
               <S.PokeDexEvolutionLink
                 key={evolution.id}
                 to={`${PAGE_URL.POKE_DEX}/${evolution.id}`}
-                $isCurrent={pokemonId === evolution.id}
+                $isCurrent={detail.id === evolution.id}
               >
                 {evolution.name}
                 {idx + 1 !== arr.length && '-'}
@@ -50,7 +43,7 @@ const PokeDexDetail = () => {
           </S.PokeDexDetailEvolutionBox>
         )}
       />
-      <PokeDexDetailDescription title="Stat" text={stats.join('\n')} />
+      <PokeDexDetailDescription title="Stat" text={detail.stats.join('\n')} />
       <S.PokeDexDetailFunctionBox>
         <S.PokeDexDetailListBtn>
           <Link to={PAGE_URL.POKE_DEX}>목록</Link>

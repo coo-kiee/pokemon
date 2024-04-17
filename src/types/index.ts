@@ -15,12 +15,11 @@ export type ListResult = {
   }>;
 };
 
-export type PokeDexList = Array<ListResult['results'][number] & { img: string; id: number }>;
-
 export type Pokemon = {
   id: number;
   name: string;
   weight: number;
+  species: { name: string; url: string };
   sprites: {
     front_default: string;
     other: {

@@ -5,6 +5,8 @@ export const API_URL = {
   BASE: 'https://pokeapi.co/api/v2',
   POKEMON: '/pokemon',
   SPECIES: '/pokemon-species',
+  TYPE: '/type',
+  ABILITY: '/ability',
 };
 
 export const PAGE_URL = {

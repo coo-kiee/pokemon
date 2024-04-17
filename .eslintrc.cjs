@@ -20,6 +20,7 @@ module.exports = {
     'no-console': 'off',
     'no-restricted-syntax': 'off',
     'react/react-in-jsx-scope': 'off',
+    'react/no-unstable-nested-components': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/jsx-no-useless-fragment': 'off',
     'react/require-default-props': 'off',
