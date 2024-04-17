@@ -1,6 +1,3 @@
-// Style
-import * as S from 'styles/pokeDexList';
-
 // API
 import { useGetPokemonDetail } from 'apis/pokeDex';
 
@@ -12,13 +9,9 @@ interface ISearchResult {
 }
 const SearchResult = ({ searchText }: ISearchResult) => {
   // Fetch
-  const { data: pokemonListOne } = useGetPokemonDetail(searchText, 'ko');
+  const { data: pokemon } = useGetPokemonDetail(searchText, 'ko');
 
-  return pokemonListOne ? (
-    <PokeDexListItem pokemon={pokemonListOne} />
-  ) : (
-    <S.PokeDexListNone>검색 결과가 없습니다.</S.PokeDexListNone>
-  );
+  return <PokeDexListItem pokemon={pokemon} />;
 };
 
 export default SearchResult;

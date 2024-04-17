@@ -1,5 +1,6 @@
 import { Suspense, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 
 // Style
 import * as S from 'styles/pokeDexList';
@@ -20,6 +21,7 @@ import { PAGE_URL } from 'consts/common';
 // Component
 import TopBtn from 'components/TopBtn';
 import Spinner from 'components/Spinner';
+import ErrorFallback from 'components/error';
 import PokeDexListItem from './PokeDexListItem';
 import SearchResult from './SearchResult';
 
@@ -65,15 +67,20 @@ const PokeDexList = () => {
       </S.PokeDexListTopBox>
       <S.PokeDexListWrapper>
         {searchPokemonId ? (
-          <Suspense
-            fallback={
-              <S.PokeDexListNone>
-                <Spinner />
-              </S.PokeDexListNone>
-            }
+          <ErrorBoundary
+            key={searchPokemonId}
+            fallbackRender={(props) => <ErrorFallback {...props} shouldReset={false} />}
           >
-            <SearchResult searchText={searchPokemonId} />
-          </Suspense>
+            <Suspense
+              fallback={
+                <S.PokeDexListNone>
+                  <Spinner />
+                </S.PokeDexListNone>
+              }
+            >
+              <SearchResult searchText={searchPokemonId} />
+            </Suspense>
+          </ErrorBoundary>
         ) : (
           pokemonList.map((item, index, arr) => (
             <PokeDexListItem

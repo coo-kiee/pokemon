@@ -19,6 +19,7 @@ export type Pokemon = {
   id: number;
   name: string;
   weight: number;
+  species: { name: string; url: string };
   sprites: {
     front_default: string;
     other: {

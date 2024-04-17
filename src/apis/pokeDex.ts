@@ -16,16 +16,7 @@ const QUERY_KEY = {
   DETAIL: (search: string, lang: string) => ['pokemonDetail', search, lang],
 };
 
-interface IGetPokemonList {
-  lang: string;
-  pokemonListUrl: string;
-  offset: number;
-  limit: number;
-}
-
 const getFromUrl = async <T>(url: string) => Axios.get(url, { baseURL: '' }) as Promise<T>;
-const getPokemon = async (search: string) => Axios.get<Pokemon>(`${API_URL.POKEMON}/${search}`);
-const getSpecies = async (search: string) => Axios.get<Species>(`${API_URL.SPECIES}/${search}`);
 
 const getFilters = async (lang: string) => {
   const [{ count: typeCnt }, { count: abilityCnt }] = await Promise.all([
@@ -55,24 +46,27 @@ export const useGetFilters = (lang: string) => {
   });
 };
 
-const getPokemonList = async ({ lang, pokemonListUrl, offset, limit }: IGetPokemonList) => {
-  const pokemonIndices = Array.from({ length: limit }, (_, idx) => offset + idx + 1);
+interface IGetPokemonList {
+  lang: string;
+  pokemonListUrl: string;
+}
+const getPokemonList = async ({ lang, pokemonListUrl }: IGetPokemonList) => {
+  const { results, next, previous } = await Axios.get<ListResult>(pokemonListUrl, { baseURL: '' });
 
-  const [{ results, next, previous }, pokemonResults, speciesResults] = await Promise.all([
-    Axios.get<ListResult>(pokemonListUrl, { baseURL: '' }),
-    Promise.all(pokemonIndices.map((index) => getPokemon(String(index)))),
-    Promise.all(pokemonIndices.map((index) => getSpecies(String(index)))),
-  ]);
+  const pokemonResults = await Promise.all(results.map((item) => getFromUrl<Pokemon>(item.url)));
+  const speciesResults = await Promise.all(pokemonResults.map((item) => getFromUrl<Species>(item.species.url)));
 
-  const [nestedAbilityReqs, nestedTypeReqs] = pokemonResults.reduce(
-    (arr, pokemonResult) => {
-      arr[0].push(pokemonResult.abilities.map((item) => getFromUrl<Ability>(item.ability.url)));
-      arr[1].push(pokemonResult.types.map((item) => getFromUrl<Type>(item.type.url)));
+  const [nestedAbilityReqs, nestedTypeReqs] = pokemonResults
+    .filter((item) => item)
+    .reduce(
+      (arr, pokemonResult) => {
+        arr[0].push(pokemonResult.abilities.map((item) => getFromUrl<Ability>(item.ability.url)));
+        arr[1].push(pokemonResult.types.map((item) => getFromUrl<Type>(item.type.url)));
 
-      return arr;
-    },
-    [[] as Promise<Ability>[][], [] as Promise<Type>[][]],
-  );
+        return arr;
+      },
+      [[] as Promise<Ability>[][], [] as Promise<Type>[][]],
+    );
 
   const [nestedAbilityResults, nestedTypeResults] = await Promise.all([
     Promise.all(nestedAbilityReqs.map((abilityReqs) => Promise.all(abilityReqs))),
@@ -102,16 +96,12 @@ export const useGetPokemonList = (offset: number, limit: number, lang: string) =
     initialPageParam: {
       lang,
       pokemonListUrl: `${API_URL.BASE}${API_URL.POKEMON}?offset=${offset}&limit=${limit}`,
-      offset,
-      limit,
     },
     getNextPageParam: (data, _, lastPageParam) => {
       if (!data.next) return undefined;
 
       return {
         lang: lastPageParam.lang,
-        limit: lastPageParam.limit,
-        offset: lastPageParam.offset + lastPageParam.limit,
         pokemonListUrl: data.next,
       };
     },
@@ -120,8 +110,6 @@ export const useGetPokemonList = (offset: number, limit: number, lang: string) =
 
       return {
         lang: firstPageParam.lang,
-        limit: firstPageParam.limit,
-        offset: firstPageParam.offset - firstPageParam.limit,
         pokemonListUrl: data.previous,
       };
     },
@@ -134,7 +122,8 @@ export const useGetPokemonList = (offset: number, limit: number, lang: string) =
 };
 
 const getPokemonDetail = async (search: string, lang: string) => {
-  const [pokemon, species] = await Promise.all([getPokemon(search), getSpecies(search)]);
+  const pokemon = await Axios.get<Pokemon>(`${API_URL.POKEMON}/${search}`);
+  const species = await getFromUrl<Species>(pokemon.species.url);
 
   const [evolution, abilityRes, typeRes, statRes] = await Promise.all([
     getFromUrl<EvolutionChain>(species.evolution_chain.url),

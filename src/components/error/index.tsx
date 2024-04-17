@@ -7,8 +7,9 @@ import * as S from 'styles/error';
 interface IError {
   error: unknown;
   resetErrorBoundary: (...args: unknown[]) => void;
+  shouldReset?: boolean;
 }
-const ErrorFallback = ({ error, resetErrorBoundary }: IError) => {
+const ErrorFallback = ({ error, resetErrorBoundary, shouldReset = true }: IError) => {
   const err = error as AxiosError;
   const is404 = err.response?.status === 404;
 
@@ -23,9 +24,11 @@ const ErrorFallback = ({ error, resetErrorBoundary }: IError) => {
   return (
     <S.ErrorContainer>
       <S.ErrorText>{showMsg}</S.ErrorText>
-      <button type="button" onClick={onClick}>
-        {btnTxt}
-      </button>
+      {shouldReset && (
+        <button type="button" onClick={onClick}>
+          {btnTxt}
+        </button>
+      )}
     </S.ErrorContainer>
   );
 };
