@@ -19,6 +19,7 @@ import Spinner from 'components/Spinner';
 import Layout from 'components/Layout';
 import Seo from 'components/seo';
 import ErrorFallback from 'components/error';
+import Modal from 'components/Modal';
 
 const Home = lazy(() => import('pages/home'));
 const PokeDex = lazy(() => import('pages/poke-dex/list'));
@@ -48,6 +49,7 @@ const App = () => {
           <GlobalStyle />
           <BrowserRouter>
             <Seo />
+            <Modal />
             <ErrorBoundary onReset={reset} fallbackRender={ErrorFallback}>
               <Suspense fallback={<Spinner />}>
                 <Routes>

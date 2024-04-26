@@ -47,6 +47,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:7.34.1"],\
             ["eslint-plugin-react-hooks", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:4.6.0"],\
             ["eslint-plugin-react-refresh", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:0.4.6"],\
+            ["immer", "npm:10.0.4"],\
             ["prettier", "npm:3.2.5"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:18.2.0"],\
@@ -3549,6 +3550,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["immer", [\
+        ["npm:10.0.4", {\
+          "packageLocation": "./.yarn/cache/immer-npm-10.0.4-61b3c15a3a-8c69cad9ad.zip/node_modules/immer/",\
+          "packageDependencies": [\
+            ["immer", "npm:10.0.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["import-fresh", [\
         ["npm:3.3.0", {\
           "packageLocation": "./.yarn/cache/import-fresh-npm-3.3.0-3e34265ca9-2cacfad06e.zip/node_modules/import-fresh/",\
@@ -4688,6 +4698,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:7.34.1"],\
             ["eslint-plugin-react-hooks", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:4.6.0"],\
             ["eslint-plugin-react-refresh", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:0.4.6"],\
+            ["immer", "npm:10.0.4"],\
             ["prettier", "npm:3.2.5"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:18.2.0"],\
@@ -6155,7 +6166,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["zustand", "virtual:e7ac6f15e3733a2af5b5ce5f9f66418488ffc57e5916780deb18d2d4f7998e3c3118404a70aced9260e7ae46845cc91b97c07b13dd5ff427f5d19e98eeeea27c#npm:4.5.2"],\
             ["@types/immer", null],\
             ["@types/react", "npm:18.2.73"],\
-            ["immer", null],\
+            ["immer", "npm:10.0.4"],\
             ["react", "npm:18.2.0"],\
             ["use-sync-external-store", "virtual:13ea7bc7d2060324ea399cc7957425e7f0652f166c7a2abbd6c892cc4b96898756b998b2a0b5b6b7173e89fe3ee62756cc5fb2e25fb9215f5187a440b1fbc8d1#npm:1.2.0"]\
           ],\
