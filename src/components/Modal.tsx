@@ -28,7 +28,7 @@ const Modal = () => {
         children = (
           <div>
             <div>{component}</div>
-            <button type="button" onClick={handleClose}>
+            <button type="button" onClick={handleConfirm}>
               확인
             </button>
           </div>
